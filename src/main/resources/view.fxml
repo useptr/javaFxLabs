@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright (c) 2015, 2019, Gluon and/or its affiliates.
+  All rights reserved. Use is subject to license terms.
+
+  This file is available and licensed under the following license:
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions
+  are met:
+
+  - Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+  - Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the distribution.
+  - Neither the name of Oracle Corporation nor the names of its
+    contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.fx2.MainScreen.MainScreenController">
+  <children>
+    <MenuBar style="-fx-background-color: #121212;" VBox.vgrow="NEVER">
+      <menus>
+        <Menu mnemonicParsing="false" text="Edit">
+          <items>
+            <MenuItem mnemonicParsing="false" onAction="#startMenuItemSelected" text="start" />
+                  <MenuItem mnemonicParsing="false" onAction="#stopMenuItemSelected" text="stop" />
+          </items>
+        </Menu>
+      </menus>
+    </MenuBar>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+         <children>
+            <HBox prefHeight="500.0" prefWidth="760.0">
+               <children>
+                  <VBox blendMode="DARKEN" prefHeight="373.0" prefWidth="300.0" style="-fx-background-color: #121212;">
+                     <children>
+                        <Button fx:id="startBtn" alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#startBtnClicked" style="-fx-background-color: #353535; -fx-text-fill: #fff;" text="start">
+                           <VBox.margin>
+                              <Insets left="10.0" right="10.0" top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="stopBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#stopBtnClicked" style="-fx-background-color: #353535; -fx-text-fill: #fff;" text="stop">
+                           <VBox.margin>
+                              <Insets left="10.0" right="10.0" top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                        <CheckBox fx:id="showInfoCheckBox" mnemonicParsing="false" onAction="#showInfoCheckBoxSelected" text="show info" textFill="WHITE">
+                           <VBox.margin>
+                              <Insets left="10.0" top="10.0" />
+                           </VBox.margin>
+                        </CheckBox>
+                        <RadioButton fx:id="hideTimeRadioBtn" mnemonicParsing="false" onAction="#hideTimeRadioBtnSelected" text="hide time" textFill="WHITE">
+                           <VBox.margin>
+                              <Insets left="10.0" top="10.0" />
+                           </VBox.margin>
+                        </RadioButton>
+                        <RadioButton fx:id="showTimeRadioBtn" mnemonicParsing="false" onAction="#showTimeRadioBtnSelected" text="show time" textFill="WHITE">
+                           <VBox.margin>
+                              <Insets left="10.0" top="5.0" />
+                           </VBox.margin>
+                        </RadioButton>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Motocycle spawn time">
+                           <VBox.margin>
+                              <Insets left="5.0" top="10.0" />
+                           </VBox.margin>
+                        </Text>
+                        <TextField fx:id="motocycleSpawnTimeTextField" accessibleHelp="hui" onMouseExited="#motocycleSpawnTimeTextFieldMouseReleased" promptText="Motocycle spawn time" style="-fx-background-color: #353535;">
+                           <VBox.margin>
+                              <Insets left="10.0" right="10.0" top="5.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Car spawn time">
+                           <VBox.margin>
+                              <Insets left="5.0" top="10.0" />
+                           </VBox.margin>
+                        </Text>
+                        <TextField fx:id="carSpawnTimeTextField" onMouseExited="#carSpawnTimeTextFieldMouseReleased" promptText="Car spawn time" style="-fx-background-color: #353535;">
+                           <VBox.margin>
+                              <Insets left="10.0" right="10.0" top="5.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Motocycle chance">
+                           <VBox.margin>
+                              <Insets left="5.0" top="10.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Slider fx:id="motocycleChanceSlider" majorTickUnit="20.0" minorTickCount="1" onValueChange="#motocycleChanceSliderValueChange" showTickLabels="true" showTickMarks="true" snapToTicks="true">
+                           <VBox.margin>
+                              <Insets left="10.0" right="10.0" />
+                           </VBox.margin>
+                        </Slider>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Car chance">
+                           <VBox.margin>
+                              <Insets left="5.0" top="5.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Slider fx:id="carChanceSlider" majorTickUnit="20.0" minorTickCount="1" onValueChange="#carChanceSliderValueChange" prefHeight="38.0" prefWidth="95.0" showTickLabels="true" showTickMarks="true" snapToTicks="true">
+                           <VBox.margin>
+                              <Insets left="10.0" right="10.0" />
+                           </VBox.margin>
+                        </Slider>
+                     </children>
+                  </VBox>
+                  <StackPane>
+                     <children>
+                        <Pane fx:id="habitatPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="480.0" prefWidth="460.0" style="-fx-background-color: #353535;" />
+                        <Text fx:id="spawnTimeText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text3" text="Время симуляции: 0" StackPane.alignment="TOP_LEFT" />
+                     </children>
+                  </StackPane>
+               </children>
+            </HBox>
+         </children>
+    </AnchorPane>
+  </children>
+</VBox>
