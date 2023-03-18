@@ -76,7 +76,9 @@ public class Habitat {
         if (spawnTime%carSpawnParameters.generationTime == 0) {
             int randInt = Math.abs(random.nextInt()%100+1);
             if ( carSpawnParameters.getGenerationProbability() >= randInt) {
-                Car car = new Car(Math.abs(random.nextInt()%(getWidth() - 50)), Math.abs(random.nextInt()%(getHeight() - 50)));
+                Car car = new Car();
+                car.setX(Math.abs(random.nextInt()%(getWidth() - car.getSize())));
+                car.setY(Math.abs(random.nextInt()%(getHeight() - car.getSize())));
                 addVehicle(car);
                 textAboutTypeAndNumbers.get("carNumbers").increaseNumbers();
 //                habitatView.addImageView(car);
@@ -86,7 +88,9 @@ public class Habitat {
         if (spawnTime%motoSpawnParameters.getGenerationTime() == 0) {
             int randInt = Math.abs(random.nextInt()%100+1);
             if (motoSpawnParameters.getGenerationProbability() >= randInt) {
-                Motorcycle motorcycle = new Motorcycle(Math.abs(random.nextInt()%(getWidth() - 50)), Math.abs(random.nextInt()%(getHeight() - 50)));
+                Motorcycle motorcycle = new Motorcycle();
+                motorcycle.setX(Math.abs(random.nextInt()%(getWidth() - motorcycle.getSize())));
+                motorcycle.setY(Math.abs(random.nextInt()%(getWidth() - motorcycle.getSize())));
                 addVehicle(motorcycle);
                 textAboutTypeAndNumbers.get("motoNumbers").increaseNumbers();
 //                habitatView.addImageView(motorcycle);

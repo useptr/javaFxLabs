@@ -4,7 +4,10 @@ public abstract class Vehicle {
     IBehaviour iBehaviour;
     private double x;
     private double y;
-    private int size;
+    private int id;
+    private int size = 50;
+    private int timeOfBirth;
+    private int lifetime;
     private String imagePath;
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
@@ -36,5 +39,21 @@ public abstract class Vehicle {
     }
     public String getImagePath() {
         return imagePath;
+    }
+
+    public int getLifetime() {
+        return lifetime;
+    }
+
+    public void setLifetime(int lifetime) {
+        this.lifetime = lifetime;
+    }
+
+    public int getTimeOfBirth() {
+        return timeOfBirth;
+    }
+
+    public void setTimeOfBirth(int timeOfBirth) {
+        this.timeOfBirth = timeOfBirth;
     }
 }

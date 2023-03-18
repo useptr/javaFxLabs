@@ -1,9 +1,6 @@
 package com.example.fx2.MainScreen;
 
-import com.example.fx2.MainScreen.models.Car;
-import com.example.fx2.MainScreen.models.Habitat;
-import com.example.fx2.MainScreen.models.Motorcycle;
-import com.example.fx2.MainScreen.models.Vehicle;
+import com.example.fx2.MainScreen.models.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -93,10 +90,39 @@ private void startMenuItemSelected() {
 //        carChanceSlider.getValue();
 
     }
+    private String getVehicleType (Vehicle vehicle) {
+        if (vehicle instanceof Car) {
+            return "Car";
+        } else if (vehicle instanceof Motorcycle) {
+            return "Motorcycle";
+        }
+        return "";
+    }
+    private void checkTextFieldValue(TextField textField, String vehicleType, VehicleSpawnParameters vehicleSpawnParameters) {
+        String spawnTimeText = textField.getText();
+        if (!spawnTimeText.isEmpty()) {
+            int spawnTime;
+            try {
+                spawnTime = Integer.parseInt(spawnTimeText);
+                if (spawnTime > 0)
+                    vehicleSpawnParameters.setGenerationTime(spawnTime);
+                else {
+                    textField.setText(vehicleSpawnParameters.getGenerationTime()+"");
+                    alert("Invalid input", vehicleType + " spawn time cannot be equal: " + spawnTimeText);
+                }
 
+            } catch (NumberFormatException e) {
+                textField.setText(vehicleSpawnParameters.getGenerationTime()+"");
+                alert("Invalid input", vehicleType + " spawn time cannot be equal: " + spawnTimeText);
+            }
+        } else {
+            textField.setText(vehicleSpawnParameters.getGenerationTime()+"");
+        }
+    }
     @FXML
     private void carSpawnTimeTextFieldMouseReleased() {
-        String carSpawnTimeText = carSpawnTimeTextField.getText();
+        checkTextFieldValue(carSpawnTimeTextField, "Car", habitatModel.getCarSpawnParameters());
+        /*String carSpawnTimeText = carSpawnTimeTextField.getText();
         if (!carSpawnTimeText.isEmpty()) {
             int carSpawnTime;
             try {
@@ -114,28 +140,11 @@ private void startMenuItemSelected() {
             }
         } else {
             carSpawnTimeTextField.setText(habitatModel.getCarSpawnParameters().getGenerationTime()+"");
-        }
+        } */
     }
     @FXML
     private void motocycleSpawnTimeTextFieldMouseReleased() {
-        String motocycleSpawnTimeText = motocycleSpawnTimeTextField.getText();
-        if (!motocycleSpawnTimeText.isEmpty()) {
-            int motocycleSpawnTime;
-            try {
-                motocycleSpawnTime = Integer.parseInt(motocycleSpawnTimeText);
-                if (motocycleSpawnTime > 0)
-                habitatModel.getMotoSpawnParameters().setGenerationTime(motocycleSpawnTime);
-                else {
-                    motocycleSpawnTimeTextField.setText(habitatModel.getMotoSpawnParameters().getGenerationTime()+"");
-                    alert("Invalid input", "Motorcycle spawn time cannot be equal: " + motocycleSpawnTimeText);
-                }
-            } catch (NumberFormatException e) {
-                motocycleSpawnTimeTextField.setText(habitatModel.getMotoSpawnParameters().getGenerationTime()+"");
-                alert("Invalid input", "Motorcycle spawn time cannot be equal: " + motocycleSpawnTimeText);
-            }
-        } else {
-            motocycleSpawnTimeTextField.setText(habitatModel.getMotoSpawnParameters().getGenerationTime()+"");
-        }
+        checkTextFieldValue(motocycleSpawnTimeTextField, "Motorcycle", habitatModel.getMotoSpawnParameters());
     }
 @FXML
 private void showTimeRadioBtnSelected() {
