@@ -122,25 +122,6 @@ private void startMenuItemSelected() {
     @FXML
     private void carSpawnTimeTextFieldMouseReleased() {
         checkTextFieldValue(carSpawnTimeTextField, "Car", habitatModel.getCarSpawnParameters());
-        /*String carSpawnTimeText = carSpawnTimeTextField.getText();
-        if (!carSpawnTimeText.isEmpty()) {
-            int carSpawnTime;
-            try {
-                carSpawnTime = Integer.parseInt(carSpawnTimeText);
-                if (carSpawnTime > 0)
-                habitatModel.getCarSpawnParameters().setGenerationTime(carSpawnTime);
-                else {
-                    carSpawnTimeTextField.setText(habitatModel.getCarSpawnParameters().getGenerationTime()+"");
-                    alert("Invalid input", "Motorcycle spawn time cannot be equal: " + carSpawnTimeText);
-                }
-
-            } catch (NumberFormatException e) {
-                carSpawnTimeTextField.setText(habitatModel.getCarSpawnParameters().getGenerationTime()+"");
-                alert("Invalid input", "Motorcycle spawn time cannot be equal: " + carSpawnTimeText);
-            }
-        } else {
-            carSpawnTimeTextField.setText(habitatModel.getCarSpawnParameters().getGenerationTime()+"");
-        } */
     }
     @FXML
     private void motocycleSpawnTimeTextFieldMouseReleased() {
