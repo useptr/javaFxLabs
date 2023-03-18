@@ -101,7 +101,13 @@ private void startMenuItemSelected() {
             int carSpawnTime;
             try {
                 carSpawnTime = Integer.parseInt(carSpawnTimeText);
+                if (carSpawnTime > 0)
                 habitatModel.getCarSpawnParameters().setGenerationTime(carSpawnTime);
+                else {
+                    carSpawnTimeTextField.setText(habitatModel.getCarSpawnParameters().getGenerationTime()+"");
+                    alert("Invalid input", "Motorcycle spawn time cannot be equal: " + carSpawnTimeText);
+                }
+
             } catch (NumberFormatException e) {
                 carSpawnTimeTextField.setText(habitatModel.getCarSpawnParameters().getGenerationTime()+"");
                 alert("Invalid input", "Motorcycle spawn time cannot be equal: " + carSpawnTimeText);
@@ -117,7 +123,12 @@ private void startMenuItemSelected() {
             int motocycleSpawnTime;
             try {
                 motocycleSpawnTime = Integer.parseInt(motocycleSpawnTimeText);
+                if (motocycleSpawnTime > 0)
                 habitatModel.getMotoSpawnParameters().setGenerationTime(motocycleSpawnTime);
+                else {
+                    motocycleSpawnTimeTextField.setText(habitatModel.getMotoSpawnParameters().getGenerationTime()+"");
+                    alert("Invalid input", "Motorcycle spawn time cannot be equal: " + motocycleSpawnTimeText);
+                }
             } catch (NumberFormatException e) {
                 motocycleSpawnTimeTextField.setText(habitatModel.getMotoSpawnParameters().getGenerationTime()+"");
                 alert("Invalid input", "Motorcycle spawn time cannot be equal: " + motocycleSpawnTimeText);
