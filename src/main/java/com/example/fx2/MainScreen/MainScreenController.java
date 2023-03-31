@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
@@ -74,6 +75,7 @@ public class MainScreenController implements EventHandler {
         showTimeRadioBtn.setSelected(true);
         showTimeMenuItem.setDisable(true);
 
+        currentVehicles.setDisable(true);
         timeline.setCycleCount(Timeline.INDEFINITE);
     }
 
@@ -287,6 +289,7 @@ private void showTimeRadioBtnSelected() {
         startMenuItem.setDisable(true);
         stopBtn.setDisable(false);
         stopMenuItem.setDisable(false);
+        currentVehicles.setDisable(false);
 
         habitatModel.setSimulationRunning(true);
         habitatModel.clear();
@@ -317,6 +320,7 @@ private void showTimeRadioBtnSelected() {
                 stopBtn.setDisable(true);
                 stopMenuItem.setDisable(true);
                 habitatModel.setSimulationRunning(false);
+                currentVehicles.setDisable(true);
                 timeline.stop();
             } else {
                 timeline.play();
@@ -327,7 +331,50 @@ private void showTimeRadioBtnSelected() {
             stopBtn.setDisable(true);
             stopMenuItem.setDisable(true);
             habitatModel.setSimulationRunning(false);
+            currentVehicles.setDisable(true);
             timeline.stop();
+        }
+    }
+    @FXML
+    Button currentVehicles;
+    @FXML
+    public void currentVehiclesBtnClicked() {
+        showCurrentVehiclesDialogWindow();
+    }
+    public void showCurrentVehiclesDialogWindow() {
+        if (habitatModel.getSimulationRunning()) {
+            timeline.stop();
+//            currentVehicles.setDisable(true);
+            Dialog<ButtonType> dialog = new Dialog<>();
+
+            dialog.setTitle("Current vehicles");
+            dialog.setHeaderText("Current vehicles");
+            VBox outer = new VBox();
+            ListView<Text> inner = new ListView<Text>();
+//            String table = new String();
+            for (var vehicle : habitatModel.getVehicles()) {
+                String note = new String();
+                note += "id: " + vehicle.getId();
+                note += " type: ";
+                if (vehicle instanceof Car) {
+                    note += "car ";
+                } else if (vehicle instanceof Motorcycle) {
+                    note += "motorcycle ";
+                }
+                note += " birth time: " + habitatModel.getVehiclesBirthTime().get(vehicle.getId());
+//                note += "\n";
+                inner.getItems().add(new Text(note));
+            }
+            outer.getChildren().addAll(inner);
+            dialog.getDialogPane().setContent(outer);
+//            dialog.setContentText(table);
+            ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(okButton);
+            Optional<ButtonType> result = dialog.showAndWait();
+            if (result.isPresent()) {
+                timeline.play();
+            } else
+                timeline.play();
         }
     }
     @Override
@@ -347,9 +394,6 @@ private void showTimeRadioBtnSelected() {
                 }
                 case T -> {
                     changeSpawnTimeVisibility();
-//                    if (habitatModel.getSimulationRunning()) {
-//                        changeSpawnTimeVisibility();
-//                    }
                 }
             }
         } else if (event.getEventType() == ActionEvent.ACTION) {

@@ -8,7 +8,7 @@ public class Habitat {
     private boolean simulationRunning = false;
     private static double width, height;
     private final HashSet<Integer> vehiclesId = new HashSet<>();
-    private final TreeMap<Integer, Integer> vehiclesBirthTime = new TreeMap<>(); // id, birthTime
+    private final TreeMap<Integer, Integer> vehiclesBirthTime = new TreeMap<>(); // id => birthTime
     public VehicleSpawnParameters motoSpawnParameters = new VehicleSpawnParameters(80,1, 2);
     public VehicleSpawnParameters carSpawnParameters = new VehicleSpawnParameters(100,3, 4);
     private final ArrayList<Vehicle> vehicles = new ArrayList<>();
@@ -59,6 +59,11 @@ public class Habitat {
 //    public void addVehicle(Vehicle vehicle) {
 //        vehicles.add(vehicle);
 //    }
+
+    public TreeMap<Integer, Integer> getVehiclesBirthTime() {
+        return vehiclesBirthTime;
+    }
+
     public double getHeight() {
         return height;
     }
@@ -101,12 +106,6 @@ public class Habitat {
             if ( carSpawnParameters.getGenerationProbability() >= randInt) {
                 Car car = new Car();
                 addVehicle(car, currentTime);
-//                car.setX(Math.abs(random.nextInt()%(getWidth() - car.getSize())));
-//                car.setY(Math.abs(random.nextInt()%(getHeight() - car.getSize())));
-//                addVehicle(car);
-//                textAboutTypeAndNumbers.get("carNumbers").increaseNumbers();
-//                habitatView.addImageView(car);
-
             }
         }
         if (currentTime %motoSpawnParameters.getGenerationTime() == 0) {
@@ -114,11 +113,6 @@ public class Habitat {
             if (motoSpawnParameters.getGenerationProbability() >= randInt) {
                 Motorcycle motorcycle = new Motorcycle();
                 addVehicle(motorcycle, currentTime);
-//                motorcycle.setX(Math.abs(random.nextInt()%(getWidth() - motorcycle.getSize())));
-//                motorcycle.setY(Math.abs(random.nextInt()%(getWidth() - motorcycle.getSize())));
-//                addVehicle(motorcycle);
-//                textAboutTypeAndNumbers.get("motoNumbers").increaseNumbers();
-//                habitatView.addImageView(motorcycle);
             }
         }
     }
