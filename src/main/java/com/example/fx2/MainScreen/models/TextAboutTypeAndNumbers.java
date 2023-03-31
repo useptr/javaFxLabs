@@ -25,4 +25,7 @@ public class TextAboutTypeAndNumbers {
     public void increaseNumbers() {
         numbers++;
     }
+    public void decreaseNumbers() {
+        numbers--;
+    }
 }

@@ -3,10 +3,22 @@ package com.example.fx2.MainScreen.models;
 public class VehicleSpawnParameters {
     int generationProbability;
     int generationTime;
-    public VehicleSpawnParameters(int generationProbability, int generationTime) {
+
+    int lifetime;
+    public VehicleSpawnParameters(int generationProbability, int generationTime, int lifetime) {
         this.generationProbability = generationProbability;
         this.generationTime = generationTime;
+        this.lifetime = lifetime;
     }
+
+    public int getLifetime() {
+        return lifetime;
+    }
+
+    public void setLifetime(int lifetime) {
+        this.lifetime = lifetime;
+    }
+
     public int getGenerationProbability() {
         return generationProbability;
     }

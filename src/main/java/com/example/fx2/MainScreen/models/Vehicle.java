@@ -56,4 +56,12 @@ public abstract class Vehicle {
     public void setTimeOfBirth(int timeOfBirth) {
         this.timeOfBirth = timeOfBirth;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

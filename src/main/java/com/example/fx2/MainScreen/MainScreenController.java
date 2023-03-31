@@ -1,6 +1,7 @@
 package com.example.fx2.MainScreen;
 
 import com.example.fx2.MainScreen.models.*;
+import com.example.fx2.MainScreen.views.VehicleImage;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -9,7 +10,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -43,9 +43,23 @@ public class MainScreenController implements EventHandler {
     Pane habitatPane;
     @FXML
     Text spawnTimeText;
+    @FXML
+    MenuItem startMenuItem;
+    @FXML
+    MenuItem stopMenuItem;
+    @FXML
+    CheckMenuItem showInfoMenuItem;
+    @FXML
+    MenuItem showTimeMenuItem;
+    @FXML
+    MenuItem hideTimeMenuItem;
+    @FXML
+    TextField motorcycleLifeTimeTextField;
+    @FXML
+    TextField carLifeTimeTextField;
     private ToggleGroup timeToggleGroup = new ToggleGroup();
 
-    private ArrayList<ImageView> vehiclesImages = new ArrayList<>();
+    private ArrayList<VehicleImage> vehiclesImages = new ArrayList<>();
     private static Habitat habitatModel;
     private Timer timer = new Timer();
 
@@ -53,9 +67,13 @@ public class MainScreenController implements EventHandler {
 
     public void initialize() {
         stopBtn.setDisable(true);
+        stopMenuItem.setDisable(true);
+
         hideTimeRadioBtn.setToggleGroup(timeToggleGroup);
         showTimeRadioBtn.setToggleGroup(timeToggleGroup);
         showTimeRadioBtn.setSelected(true);
+        showTimeMenuItem.setDisable(true);
+
         timeline.setCycleCount(Timeline.INDEFINITE);
     }
 
@@ -68,15 +86,31 @@ public class MainScreenController implements EventHandler {
 
         alert.showAndWait();
     }
-@FXML
-private void stopMenuItemSelected() {
+    @FXML
+    private void showTimeMenuItemSelected() {
+        changeSpawnTimeVisibility();
+    }
+    @FXML
+    private void hideTimeMenuItemSelected() {
+        changeSpawnTimeVisibility();
+    }
+    @FXML
+    private void stopMenuItemSelected() {
         if (habitatModel.getSimulationRunning())
             stopSpawn();
-}
-@FXML
-private void startMenuItemSelected() {
+    }
+    @FXML
+    private void startMenuItemSelected() {
     if (!habitatModel.getSimulationRunning())
         startSpawn();
+    }
+    @FXML
+    private void startBtnClicked() {
+        startSpawn();
+    }
+    @FXML
+    private void stopBtnClicked() {
+        stopSpawn();
     }
     @FXML
     private void motocycleChanceSliderValueChange() {
@@ -98,22 +132,42 @@ private void startMenuItemSelected() {
         }
         return "";
     }
-    private void checkTextFieldValue(TextField textField, String vehicleType, VehicleSpawnParameters vehicleSpawnParameters) {
-        String spawnTimeText = textField.getText();
-        if (!spawnTimeText.isEmpty()) {
+    private void checkLifetimeTextFieldValue(TextField textField, String errorMsg, VehicleSpawnParameters vehicleSpawnParameters) {
+        String text = textField.getText();
+        if (!text.isEmpty()) {
+            int lifetime;
+            try {
+                lifetime = Integer.parseInt(text);
+                if (lifetime > 0)
+                    vehicleSpawnParameters.setLifetime(lifetime);
+                else {
+                    textField.setText(vehicleSpawnParameters.getLifetime()+"");
+                    alert("Invalid input", errorMsg + text);
+                }
+            } catch (NumberFormatException e) {
+                textField.setText(vehicleSpawnParameters.getLifetime()+"");
+                alert("Invalid input", errorMsg + text);
+            }
+        } else {
+            textField.setText(vehicleSpawnParameters.getLifetime()+"");
+        }
+    }
+    private void checkSpawnTimeTextFieldValue(TextField textField, String vehicleType, VehicleSpawnParameters vehicleSpawnParameters) {
+        String text = textField.getText();
+        if (!text.isEmpty()) {
             int spawnTime;
             try {
-                spawnTime = Integer.parseInt(spawnTimeText);
+                spawnTime = Integer.parseInt(text);
                 if (spawnTime > 0)
                     vehicleSpawnParameters.setGenerationTime(spawnTime);
                 else {
                     textField.setText(vehicleSpawnParameters.getGenerationTime()+"");
-                    alert("Invalid input", vehicleType + " spawn time cannot be equal: " + spawnTimeText);
+                    alert("Invalid input", vehicleType + " spawn time cannot be equal: " + text);
                 }
 
             } catch (NumberFormatException e) {
                 textField.setText(vehicleSpawnParameters.getGenerationTime()+"");
-                alert("Invalid input", vehicleType + " spawn time cannot be equal: " + spawnTimeText);
+                alert("Invalid input", vehicleType + " spawn time cannot be equal: " + text);
             }
         } else {
             textField.setText(vehicleSpawnParameters.getGenerationTime()+"");
@@ -121,34 +175,55 @@ private void startMenuItemSelected() {
     }
     @FXML
     private void carSpawnTimeTextFieldMouseReleased() {
-        checkTextFieldValue(carSpawnTimeTextField, "Car", habitatModel.getCarSpawnParameters());
+        checkSpawnTimeTextFieldValue(carSpawnTimeTextField, "Car", habitatModel.getCarSpawnParameters());
     }
     @FXML
     private void motocycleSpawnTimeTextFieldMouseReleased() {
-        checkTextFieldValue(motocycleSpawnTimeTextField, "Motorcycle", habitatModel.getMotoSpawnParameters());
+        checkSpawnTimeTextFieldValue(motocycleSpawnTimeTextField, "Motorcycle", habitatModel.getMotoSpawnParameters());
+    }
+    @FXML
+    private void motocycleLifeTimeTextFieldMouseReleased() {
+        checkLifetimeTextFieldValue(motorcycleLifeTimeTextField, "Motorcycle lifetime cannot be equal: ", habitatModel.getMotoSpawnParameters());
+    }
+    @FXML
+    private void carLifeTimeTextFieldMouseReleased() {
+        checkLifetimeTextFieldValue(carLifeTimeTextField, "Motorcycle lifetime cannot be equal: ", habitatModel.getCarSpawnParameters());
     }
 @FXML
 private void showTimeRadioBtnSelected() {
-    spawnTimeText.setVisible(true);
+    changeSpawnTimeVisibility();
     }
     @FXML
     private void hideTimeRadioBtnSelected() {
-        spawnTimeText.setVisible(false);
+        changeSpawnTimeVisibility();
     }
-    @FXML
-    private void startBtnClicked() {
-        startSpawn();
-    }
-    @FXML
-    private void stopBtnClicked() {
-        stopSpawn();
-    }
+
     @FXML
     private void showInfoCheckBoxSelected() {
+        if (showInfoCheckBox.isSelected()) {
+            showInfoCheckBox();
+        } else {
+            hideInfoCheckBox();
+        }
+
     }
-    public ArrayList<ImageView> getVehiclesImages() {
-        return vehiclesImages;
+    @FXML
+    private void showInfoMenuItemCheckBoxSelected() {
+        if (showInfoMenuItem.isSelected()) {
+            showInfoCheckBox();
+        } else {
+            hideInfoCheckBox();
+        }
     }
+    void showInfoCheckBox() {
+        showInfoCheckBox.setSelected(true);
+        showInfoMenuItem.setSelected(true);
+    }
+    void hideInfoCheckBox() {
+        showInfoCheckBox.setSelected(false);
+        showInfoMenuItem.setSelected(false);
+    }
+
 
     public Button getStartBtn() {
         return startBtn;
@@ -191,22 +266,27 @@ private void showTimeRadioBtnSelected() {
         motocycleChanceSlider.setValue(this.habitatModel.getMotoSpawnParameters().getGenerationProbability());
         motocycleSpawnTimeTextField.setText(this.habitatModel.getMotoSpawnParameters().getGenerationTime()+"");
         carSpawnTimeTextField.setText(this.habitatModel.getCarSpawnParameters().getGenerationTime()+"");
-    }
-    public void setVehiclesImages(ArrayList<ImageView> vehiclesImages) {
-        this.vehiclesImages = vehiclesImages;
+        motorcycleLifeTimeTextField.setText(this.habitatModel.getMotoSpawnParameters().getLifetime()+"");
+        carLifeTimeTextField.setText(this.habitatModel.getCarSpawnParameters().getLifetime()+"");
     }
     public void changeSpawnTimeVisibility() {
-        if (showTimeRadioBtn.isSelected()) {
+        if (spawnTimeText.isVisible()) {
             hideTimeRadioBtn.setSelected(true);
+            hideTimeMenuItem.setDisable(true);
+            showTimeMenuItem.setDisable(false);
             spawnTimeText.setVisible(false);
         } else {
             showTimeRadioBtn.setSelected(true);
+            showTimeMenuItem.setDisable(true);
+            hideTimeMenuItem.setDisable(false);
             spawnTimeText.setVisible(true);
         }
     }
     public void startSpawn() {
         startBtn.setDisable(true);
+        startMenuItem.setDisable(true);
         stopBtn.setDisable(false);
+        stopMenuItem.setDisable(false);
 
         habitatModel.setSimulationRunning(true);
         habitatModel.clear();
@@ -233,7 +313,9 @@ private void showTimeRadioBtnSelected() {
 
             if (result.isPresent() && result.get() == okButton) {
                 startBtn.setDisable(false);
+                startMenuItem.setDisable(false);
                 stopBtn.setDisable(true);
+                stopMenuItem.setDisable(true);
                 habitatModel.setSimulationRunning(false);
                 timeline.stop();
             } else {
@@ -241,7 +323,9 @@ private void showTimeRadioBtnSelected() {
             }
         } else {
             startBtn.setDisable(false);
+            startMenuItem.setDisable(false);
             stopBtn.setDisable(true);
+            stopMenuItem.setDisable(true);
             habitatModel.setSimulationRunning(false);
             timeline.stop();
         }
@@ -251,24 +335,21 @@ private void showTimeRadioBtnSelected() {
         if (event.getEventType() == KeyEvent.KEY_PRESSED) {
             KeyEvent keyEvent = (KeyEvent)event;
             switch (keyEvent.getCode()) {
-                case B: {
+                case B -> {
                     if (!habitatModel.getSimulationRunning()) {
                         startSpawn();
                     }
-                    break;
                 }
-                case E: {
+                case E -> {
                     if (habitatModel.getSimulationRunning()) {
                         stopSpawn();
                     }
-                    break;
                 }
-                case T: {
+                case T -> {
                     changeSpawnTimeVisibility();
 //                    if (habitatModel.getSimulationRunning()) {
 //                        changeSpawnTimeVisibility();
 //                    }
-                    break;
                 }
             }
         } else if (event.getEventType() == ActionEvent.ACTION) {
@@ -276,15 +357,26 @@ private void showTimeRadioBtnSelected() {
             int spawnTime = habitatModel.getTextAboutTypeAndNumbers().get("T").getNumbers();
             spawnTimeText.setText(habitatModel.getTextAboutTypeAndNumbers().get("T").getFinishedInformation());
             habitatModel.Update(spawnTime);
-
-            for (int i = vehiclesImages.size(); i < habitatModel.getVehicles().size(); i++) {
+            // remove Elapsed
+            for (int i = 0; i < vehiclesImages.size(); i++) {
+                var vehicleImage = vehiclesImages.get(i);
+                if (!habitatModel.getVehiclesId().contains(vehicleImage.getVehicleId())) {
+                    habitatPane.getChildren().remove(vehicleImage.getImageView());
+                    vehiclesImages.remove(vehicleImage);
+                    i--;
+                }
+            }
+            for (int i = vehiclesImages.size(); i < habitatModel.getVehicles().size(); i++) { // add new
                 Vehicle vehicle = habitatModel.getVehicles().get(i);
                 Image image = new Image(getClass().getResource(vehicle.getImagePath()).toString(), 50, 50, false, false);
-                ImageView imageView = new ImageView(image);
-                imageView.setX(vehicle.getX());
-                imageView.setY(vehicle.getY());
-                vehiclesImages.add(imageView);
-                habitatPane.getChildren().add(imageView);
+//                ImageView imageView = new ImageView(image);
+                VehicleImage vehicleImage = new VehicleImage(vehicle, image);
+                vehiclesImages.add(vehicleImage);
+                habitatPane.getChildren().add(vehicleImage.getImageView());
+//                imageView.setX(vehicle.getX());
+//                imageView.setY(vehicle.getY());
+//                vehiclesImages.add(imageView);
+//                habitatPane.getChildren().add(imageView);
             }
         }
     }
