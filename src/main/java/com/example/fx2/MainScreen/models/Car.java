@@ -6,5 +6,6 @@ public class Car extends Vehicle{
         super.setImagePath(imagePath);
         super.setX(x);
         super.setY(y);
+		System.out.println("loooooh");
     }
 }
