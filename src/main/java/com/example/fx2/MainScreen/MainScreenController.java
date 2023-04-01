@@ -417,10 +417,6 @@ private void showTimeRadioBtnSelected() {
                 VehicleImage vehicleImage = new VehicleImage(vehicle, image);
                 vehiclesImages.add(vehicleImage);
                 habitatPane.getChildren().add(vehicleImage.getImageView());
-//                imageView.setX(vehicle.getX());
-//                imageView.setY(vehicle.getY());
-//                vehiclesImages.add(imageView);
-//                habitatPane.getChildren().add(imageView);
             }
         }
     }

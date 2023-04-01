@@ -2,6 +2,7 @@ package com.example.fx2;
 
 import com.example.fx2.MainScreen.MainScreenController;
 import com.example.fx2.MainScreen.models.Habitat;
+import com.example.fx2.MainScreen.models.VehiclesCollections;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,7 +19,8 @@ public class Main extends Application {
 
         MainScreenController mainScreenController = fxmlLoader.getController();
         scene.setOnKeyPressed(mainScreenController);
-        Habitat.initialize(mainScreenController.getHabitatPane().getPrefWidth(),mainScreenController.getHabitatPane().getPrefHeight());
+        VehiclesCollections.initialize();
+        Habitat.initialize(VehiclesCollections.getVehiclesCollections(), mainScreenController.getHabitatPane().getPrefWidth(),mainScreenController.getHabitatPane().getPrefHeight());
         mainScreenController.setHabitatModel(Habitat.getHabitat());
 
         stage.setScene(scene);
