@@ -21,6 +21,7 @@ import java.util.Optional;
 import java.util.Timer;
 
 public class MainScreenController implements EventHandler {
+    private static final int SECOND = 1000;
 
     @FXML
     Button startBtn;
@@ -63,10 +64,11 @@ public class MainScreenController implements EventHandler {
     private ArrayList<VehicleImage> vehiclesImages = new ArrayList<>();
     private static Habitat habitatModel;
     private Timer timer = new Timer();
-
-    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), this));
+    Timeline AItimeline = new Timeline(new KeyFrame(Duration.millis(SECOND/120), this::AIhandle));
+    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(SECOND), this));
 
     public void initialize() {
+
         stopBtn.setDisable(true);
         stopMenuItem.setDisable(true);
 
@@ -77,6 +79,7 @@ public class MainScreenController implements EventHandler {
 
         currentVehicles.setDisable(true);
         timeline.setCycleCount(Timeline.INDEFINITE);
+        AItimeline.setCycleCount(Timeline.INDEFINITE);
     }
 
 
@@ -298,11 +301,13 @@ private void showTimeRadioBtnSelected() {
 
         spawnTimeText.setText(habitatModel.getTextAboutTypeAndNumbers().get("T").getFinishedInformation());
 
+        AItimeline.play();
         timeline.play();
     }
     public void stopSpawn() {
         if (showInfoCheckBox.isSelected()) {
             timeline.stop();
+            AItimeline.stop();
 
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Stop simulation?");
@@ -322,8 +327,10 @@ private void showTimeRadioBtnSelected() {
                 habitatModel.setSimulationRunning(false);
                 currentVehicles.setDisable(true);
                 timeline.stop();
+                AItimeline.stop();
             } else {
                 timeline.play();
+                AItimeline.play();
             }
         } else {
             startBtn.setDisable(false);
@@ -333,6 +340,7 @@ private void showTimeRadioBtnSelected() {
             habitatModel.setSimulationRunning(false);
             currentVehicles.setDisable(true);
             timeline.stop();
+            AItimeline.stop();
         }
     }
     @FXML
@@ -344,6 +352,7 @@ private void showTimeRadioBtnSelected() {
     public void showCurrentVehiclesDialogWindow() {
         if (habitatModel.getSimulationRunning()) {
             timeline.stop();
+            AItimeline.stop();
 //            currentVehicles.setDisable(true);
             Dialog<ButtonType> dialog = new Dialog<>();
 
@@ -373,9 +382,36 @@ private void showTimeRadioBtnSelected() {
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.isPresent()) {
                 timeline.play();
-            } else
+                AItimeline.play();
+            } else {
                 timeline.play();
+                AItimeline.play();
+            }
+
+
         }
+    }
+    private  VehicleImage findVehicleImageById(int id) {
+        VehicleImage res = null;
+        for(var vehicleImage : vehiclesImages){
+            if(vehicleImage.getVehicleId() == id ){
+                res = vehicleImage;
+                break;
+            }
+        }
+        return res;
+    }
+    public void AIhandle(ActionEvent event) {
+        AItimeline.stop();
+//        System.out.println("move");
+        for (var vehicle : habitatModel.getVehicles()) {
+            vehicle.performBehaviour();
+            var vehiclesImage = findVehicleImageById(vehicle.getId());
+            if (vehiclesImage != null) {
+                vehiclesImage.updateXAndYCoordinates(vehicle.getX(), vehicle.getY());
+            }
+        }
+        AItimeline.play();
     }
     @Override
     public void handle(Event event) {

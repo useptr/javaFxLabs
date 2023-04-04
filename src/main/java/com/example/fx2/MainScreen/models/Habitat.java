@@ -4,14 +4,14 @@ import java.util.*;
 
 public class Habitat {
     private static Habitat habitat;
-    private IBehaviour iBehaviour = new MoveNoWay();
+//    private IBehaviour iBehaviour = new MoveNoWay();
     private boolean simulationRunning = false;
     private static double width, height;
     private static VehiclesCollections vehiclesCollections;
 //    private final HashSet<Integer> vehiclesId = new HashSet<>();
 //    private final TreeMap<Integer, Integer> vehiclesBirthTime = new TreeMap<>(); // id => birthTime
-    public VehicleSpawnParameters motoSpawnParameters = new VehicleSpawnParameters(80,1, 2);
-    public VehicleSpawnParameters carSpawnParameters = new VehicleSpawnParameters(100,3, 4);
+    public VehicleSpawnParameters motoSpawnParameters = new VehicleSpawnParameters(80,1, 20);
+    public VehicleSpawnParameters carSpawnParameters = new VehicleSpawnParameters(100,3, 40);
 //    private final ArrayList<Vehicle> vehicles = new ArrayList<>();
 
     public HashSet<Integer> getVehiclesId() {
@@ -28,6 +28,7 @@ public class Habitat {
 
     public static void initialize(VehiclesCollections vehiclesCollections, double width, double height) {
         habitat = new Habitat(vehiclesCollections, width, height);
+        BaseAI.setMaxXAndY(width - 50, height);
     }
 //    Timeline timeline;
     private Habitat(VehiclesCollections vehiclesCollections,double width, double height) {

@@ -1,7 +1,10 @@
 package com.example.fx2.MainScreen.models;
 
+import javafx.geometry.Point2D;
+
 public abstract class Vehicle {
-    IBehaviour iBehaviour;
+//    IBehaviour iBehaviour;
+    BaseAI vehicleBehaviour;
     private double x;
     private double y;
     private int id;
@@ -12,8 +15,16 @@ public abstract class Vehicle {
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
     }
+
+    public void setVehicleBehaviour(BaseAI vehicleBehaviour) {
+        this.vehicleBehaviour = vehicleBehaviour;
+    }
+
     public void performBehaviour() {
-        iBehaviour.moveBehaviour();
+//        iBehaviour.moveBehaviour();
+        Point2D point = vehicleBehaviour.getNewCoordinates(x, y);
+        x = point.getX();
+        y = point.getY();
     }
 
     public void setSize(int size) {
@@ -25,9 +36,9 @@ public abstract class Vehicle {
     public void setX(double x) {
         this.x = x;
     }
-    public void setIBehaviour(IBehaviour iBehaviour) {
-        this.iBehaviour =iBehaviour;
-    }
+//    public void setIBehaviour(IBehaviour iBehaviour) {
+//        this.iBehaviour =iBehaviour;
+//    }
     public int getSize() {
         return size;
     }

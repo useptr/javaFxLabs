@@ -12,6 +12,11 @@ public class VehicleImage {
         imageView = new ImageView(image);
         imageView.setX(vehicle.getX());
         imageView.setY(vehicle.getY());
+
+    }
+    public void updateXAndYCoordinates(double x, double y) {
+        imageView.setX(x);
+        imageView.setY(y);
     }
 
     public int getVehicleId() {
