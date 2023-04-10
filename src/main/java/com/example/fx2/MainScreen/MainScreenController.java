@@ -65,11 +65,9 @@ public class MainScreenController implements EventHandler {
 
     private ArrayList<VehicleImage> vehiclesImages = new ArrayList<>();
     private static Habitat habitatModel;
-//    Timeline AItimeline = new Timeline(new KeyFrame(Duration.millis(SECOND/120), this::AIhandle));
-    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(SECOND/120), this::actionHandle));
+    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(SECOND), this::updateVehicles));
 
 //    AnimationTimer at = new AnimationTimer();
-    private double currentTime = 0;
 
     public void initialize() {
 
@@ -83,8 +81,6 @@ public class MainScreenController implements EventHandler {
 
         currentVehicles.setDisable(true);
         timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.setAutoReverse(false);
-//        AItimeline.setCycleCount(Timeline.INDEFINITE);
     }
 
 
@@ -306,10 +302,12 @@ private void showTimeRadioBtnSelected() {
 
         spawnTimeText.setText(habitatModel.getTextAboutTypeAndNumbers().get("T").getFinishedInformation());
         timeline.play();
+        animationTimer.start();
     }
     public void stopSpawn() {
         if (showInfoCheckBox.isSelected()) {
             timeline.stop();
+            animationTimer.stop();
 
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Stop simulation?");
@@ -329,8 +327,10 @@ private void showTimeRadioBtnSelected() {
                 habitatModel.setSimulationRunning(false);
                 currentVehicles.setDisable(true);
                 timeline.stop();
+                animationTimer.stop();
             } else {
                 timeline.play();
+                animationTimer.start();
             }
         } else {
             startBtn.setDisable(false);
@@ -340,6 +340,7 @@ private void showTimeRadioBtnSelected() {
             habitatModel.setSimulationRunning(false);
             currentVehicles.setDisable(true);
             timeline.stop();
+            animationTimer.stop();
         }
     }
     @FXML
@@ -351,6 +352,7 @@ private void showTimeRadioBtnSelected() {
     public void showCurrentVehiclesDialogWindow() {
         if (habitatModel.getSimulationRunning()) {
             timeline.stop();
+            animationTimer.stop();
 //            currentVehicles.setDisable(true);
             Dialog<ButtonType> dialog = new Dialog<>();
 
@@ -380,11 +382,11 @@ private void showTimeRadioBtnSelected() {
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.isPresent()) {
                 timeline.play();
+                animationTimer.start();
             } else {
                 timeline.play();
+                animationTimer.start();
             }
-
-
         }
     }
     private  VehicleImage findVehicleImageById(int id) {
@@ -397,30 +399,12 @@ private void showTimeRadioBtnSelected() {
         }
         return res;
     }
-    public void actionHandle(ActionEvent event) {
-        currentTime += SECOND/120;
-        int spawnTime = habitatModel.getTextAboutTypeAndNumbers().get("T").getNumbers();
-        if ((int)currentTime > spawnTime*SECOND) {
-            habitatModel.getTextAboutTypeAndNumbers().get("T").increaseNumbers();
-            spawnTimeText.setText(habitatModel.getTextAboutTypeAndNumbers().get("T").getFinishedInformation());
-            habitatModel.Update(spawnTime);
-        }
-        habitatPane.getChildren().clear();
-        System.out.println(currentTime);
-            vehiclesImages.clear();
-        ArrayList<Vehicle> vehicles = habitatModel.getVehicles();
-        for (int i = 0; i < vehicles.size(); i++) { // add new
-            Vehicle vehicle = vehicles.get(i);
-            Image image = new Image(getClass().getResource(vehicle.getImagePath()).toString(), 50, 50, false, false);
-//                Image image = new Image("file:/Users/doctypetdmicloud.com/IdeaProjects/fx2/target/classes/assets/car.png", 50, 50, false, false);
-            //                VehicleImage vehicleImage = new VehicleImage(vehicle, image);
-//                vehiclesImages.add(vehicleImage);
-            ImageView vehicleImage = new ImageView(image);
-            vehicleImage.setX(vehicle.getX());
-            vehicleImage.setY(vehicle.getY());
-            habitatPane.getChildren().add(vehicleImage);
-//                habitatPane.getChildren().add(vehicleImage.getImageView());
-        }
+    public synchronized void updateVehicles(ActionEvent event) {
+
+        Habitat.getHabitat().getTextAboutTypeAndNumbers().get("T").increaseNumbers();
+        int spawnTime = Habitat.getHabitat().getTextAboutTypeAndNumbers().get("T").getNumbers();
+        spawnTimeText.setText(Habitat.getHabitat().getTextAboutTypeAndNumbers().get("T").getFinishedInformation());
+        Habitat.getHabitat().Update(spawnTime);
     }
     @Override
     public void handle(Event event) {
@@ -441,6 +425,33 @@ private void showTimeRadioBtnSelected() {
                     changeSpawnTimeVisibility();
                 }
             }
+        }
+    }
+
+    AnimationTimer animationTimer = new AnimationTimer() {
+        @Override
+        public void handle(long now) {
+            drawVehicles();
+//            System.out.println("drawVehicles");
+            try {
+                long step = 1;
+                Thread.sleep(step);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    };
+    private void drawVehicles() {
+//        habitatPane.getChildren().clear();
+
+        ArrayList<Vehicle> vehicles = Habitat.getHabitat().getVehicles();
+        for (int i = 0; i < vehicles.size(); i++) { // add new
+            Vehicle vehicle = vehicles.get(i);
+            Image image = new Image(getClass().getResource(vehicle.getImagePath()).toString(), 50, 50, false, false);
+            ImageView imageView = new ImageView(image);
+            imageView.setX(vehicle.getX());
+            imageView.setY(vehicle.getY());
+            habitatPane.getChildren().add(imageView);
         }
     }
 }

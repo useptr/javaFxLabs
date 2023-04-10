@@ -11,27 +11,23 @@ public abstract class BaseAI extends Thread {
     public abstract void updateCoordinates();
     @Override
     public void run() {
-//        while (true) {
-//            System.out.println(getName());
+        while (true) {
+            System.out.println(getName());
             if (isRun) {
                 updateCoordinates();
+                try {
+                    Thread.sleep(1000 / 120);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
-
-//            if (isRun) {
-//                updateCoordinates();
-//                try {
-//                    Thread.sleep(1000 / 120);
-//                } catch (InterruptedException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            } else {
-//                try {
-//                    wait();
-//                } catch (InterruptedException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//        }
+        }
     }
     public synchronized void startAI() {
         if (!isRun) {

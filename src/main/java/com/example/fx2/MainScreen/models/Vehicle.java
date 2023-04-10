@@ -57,7 +57,7 @@ public abstract class Vehicle {
 //        this.vehicleBehaviour = vehicleBehaviour;
 //    }
 
-    public void performBehaviour() {
+    public synchronized void performBehaviour() {
         vehicleBehaviour.updateCoordinates(this);
     }
 

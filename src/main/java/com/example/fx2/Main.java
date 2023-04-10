@@ -25,7 +25,7 @@ public class Main extends Application {
 //        BaseAI carAI = new CarAI();
 //        carAI.start();
 //        carAI.startAI();
-//        AIController aiController = new AIController();
+        AIController aiController = new AIController();
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();

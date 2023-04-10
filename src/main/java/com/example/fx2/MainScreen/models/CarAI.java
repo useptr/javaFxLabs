@@ -8,7 +8,7 @@ public class CarAI extends BaseAI{
 
 
     @Override
-    public synchronized void updateCoordinates() {
+    public void updateCoordinates() {
         for (var vehicle : Habitat.getHabitat().getVehicles()) {
             if (vehicle instanceof Car)
                 vehicle.performBehaviour();

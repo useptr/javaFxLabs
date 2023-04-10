@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class MotorcycleAI extends BaseAI{
     @Override
-    public synchronized void updateCoordinates() {
+    public void updateCoordinates() {
         for (var vehicle : Habitat.getHabitat().getVehicles()) {
             if (vehicle instanceof Motorcycle)
                 vehicle.performBehaviour();
