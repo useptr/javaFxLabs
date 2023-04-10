@@ -2,9 +2,13 @@ package com.example.fx2.MainScreen.models;
 
 import javafx.geometry.Point2D;
 
+import java.util.Random;
+
 public abstract class Vehicle {
-//    IBehaviour iBehaviour;
-    BaseAI vehicleBehaviour;
+    IBehaviour vehicleBehaviour;
+//    BaseAI vehicleBehaviour;
+    private static double maxX;
+    private static double maxY;
     private double x;
     private double y;
     private int id;
@@ -12,19 +16,49 @@ public abstract class Vehicle {
     private int timeOfBirth;
     private int lifetime;
     private String imagePath;
+    int xDirection;
+    int yDirection;
+    public double getStep() {
+        return step;
+    }
+    double step;
+    public int getxDirection() {
+        return xDirection;
+    }
+
+    public void setxDirection(int xDirection) {
+        this.xDirection = xDirection;
+    }
+
+    public int getyDirection() {
+        return yDirection;
+    }
+
+    public void setyDirection(int yDirection) {
+        this.yDirection = yDirection;
+    }
+    public static double getMaxX() {
+        return maxX;
+    }
+
+    public static void setMaxXAndMaxY(double maxX, double maxY) {
+        Vehicle.maxX = maxX;
+        Vehicle.maxY = maxY;
+    }
+
+    public static double getMaxY() {
+        return maxY;
+    }
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
     }
 
-    public void setVehicleBehaviour(BaseAI vehicleBehaviour) {
-        this.vehicleBehaviour = vehicleBehaviour;
-    }
+//    public void setVehicleBehaviour(BaseAI vehicleBehaviour) {
+//        this.vehicleBehaviour = vehicleBehaviour;
+//    }
 
     public void performBehaviour() {
-//        iBehaviour.moveBehaviour();
-        Point2D point = vehicleBehaviour.getNewCoordinates(x, y);
-        x = point.getX();
-        y = point.getY();
+        vehicleBehaviour.updateCoordinates(this);
     }
 
     public void setSize(int size) {

@@ -28,7 +28,8 @@ public class Habitat {
 
     public static void initialize(VehiclesCollections vehiclesCollections, double width, double height) {
         habitat = new Habitat(vehiclesCollections, width, height);
-        BaseAI.setMaxXAndY(width - 50, height);
+        Vehicle.setMaxXAndMaxY(width - 50, height);
+//        BaseAI.setMaxXAndY(width - 50, height);
     }
 //    Timeline timeline;
     private Habitat(VehiclesCollections vehiclesCollections,double width, double height) {
