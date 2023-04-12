@@ -1,6 +1,7 @@
 package com.example.fx2.MainScreen.models;
 
 import javafx.geometry.Point2D;
+import javafx.scene.image.Image;
 
 import java.util.Random;
 
@@ -15,7 +16,7 @@ public abstract class Vehicle {
     private int size = 50;
     private int timeOfBirth;
     private int lifetime;
-    private String imagePath;
+
     int xDirection;
     int yDirection;
     public double getStep() {
@@ -49,9 +50,7 @@ public abstract class Vehicle {
     public static double getMaxY() {
         return maxY;
     }
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
+
 
 //    public void setVehicleBehaviour(BaseAI vehicleBehaviour) {
 //        this.vehicleBehaviour = vehicleBehaviour;
@@ -82,9 +81,7 @@ public abstract class Vehicle {
     public double getY() {
         return y;
     }
-    public String getImagePath() {
-        return imagePath;
-    }
+
 
     public int getLifetime() {
         return lifetime;

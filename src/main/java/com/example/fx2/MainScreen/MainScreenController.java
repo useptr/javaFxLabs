@@ -20,7 +20,6 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.Timer;
 
 public class MainScreenController implements EventHandler {
     private static final double SECOND = 1000;
@@ -66,9 +65,6 @@ public class MainScreenController implements EventHandler {
     private ArrayList<VehicleImage> vehiclesImages = new ArrayList<>();
     private static Habitat habitatModel;
     Timeline timeline = new Timeline(new KeyFrame(Duration.millis(SECOND), this::updateVehicles));
-
-//    AnimationTimer at = new AnimationTimer();
-
     public void initialize() {
 
         stopBtn.setDisable(true);
@@ -203,7 +199,6 @@ private void showTimeRadioBtnSelected() {
     private void hideTimeRadioBtnSelected() {
         changeSpawnTimeVisibility();
     }
-
     @FXML
     private void showInfoCheckBoxSelected() {
         if (showInfoCheckBox.isSelected()) {
@@ -229,8 +224,6 @@ private void showTimeRadioBtnSelected() {
         showInfoCheckBox.setSelected(false);
         showInfoMenuItem.setSelected(false);
     }
-
-
     public Button getStartBtn() {
         return startBtn;
     }
@@ -353,14 +346,11 @@ private void showTimeRadioBtnSelected() {
         if (habitatModel.getSimulationRunning()) {
             timeline.stop();
             animationTimer.stop();
-//            currentVehicles.setDisable(true);
             Dialog<ButtonType> dialog = new Dialog<>();
-
             dialog.setTitle("Current vehicles");
             dialog.setHeaderText("Current vehicles");
             VBox outer = new VBox();
             ListView<Text> inner = new ListView<Text>();
-//            String table = new String();
             for (var vehicle : habitatModel.getVehicles()) {
                 String note = new String();
                 note += "id: " + vehicle.getId();
@@ -371,12 +361,10 @@ private void showTimeRadioBtnSelected() {
                     note += "motorcycle ";
                 }
                 note += " birth time: " + habitatModel.getVehiclesBirthTime().get(vehicle.getId());
-//                note += "\n";
                 inner.getItems().add(new Text(note));
             }
             outer.getChildren().addAll(inner);
             dialog.getDialogPane().setContent(outer);
-//            dialog.setContentText(table);
             ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
             dialog.getDialogPane().getButtonTypes().addAll(okButton);
             Optional<ButtonType> result = dialog.showAndWait();
@@ -399,12 +387,11 @@ private void showTimeRadioBtnSelected() {
         }
         return res;
     }
-    public synchronized void updateVehicles(ActionEvent event) {
-
-        Habitat.getHabitat().getTextAboutTypeAndNumbers().get("T").increaseNumbers();
-        int spawnTime = Habitat.getHabitat().getTextAboutTypeAndNumbers().get("T").getNumbers();
-        spawnTimeText.setText(Habitat.getHabitat().getTextAboutTypeAndNumbers().get("T").getFinishedInformation());
-        Habitat.getHabitat().Update(spawnTime);
+    public void updateVehicles(ActionEvent event) {
+        Habitat.getInstance().getTextAboutTypeAndNumbers().get("T").increaseNumbers();
+        int spawnTime = Habitat.getInstance().getTextAboutTypeAndNumbers().get("T").getNumbers();
+        spawnTimeText.setText(Habitat.getInstance().getTextAboutTypeAndNumbers().get("T").getFinishedInformation());
+        Habitat.getInstance().Update(spawnTime);
     }
     @Override
     public void handle(Event event) {
@@ -412,12 +399,12 @@ private void showTimeRadioBtnSelected() {
             KeyEvent keyEvent = (KeyEvent)event;
             switch (keyEvent.getCode()) {
                 case B -> {
-                    if (!habitatModel.getSimulationRunning()) {
+                    if (!Habitat.getInstance().getSimulationRunning()) {
                         startSpawn();
                     }
                 }
                 case E -> {
-                    if (habitatModel.getSimulationRunning()) {
+                    if (Habitat.getInstance().getSimulationRunning()) {
                         stopSpawn();
                     }
                 }
@@ -427,28 +414,31 @@ private void showTimeRadioBtnSelected() {
             }
         }
     }
-
     AnimationTimer animationTimer = new AnimationTimer() {
         @Override
         public void handle(long now) {
             drawVehicles();
-//            System.out.println("drawVehicles");
-            try {
-                long step = 1;
-                Thread.sleep(step);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+//            try {
+//                long step = 1000/120;
+//                System.out.println(now + " " + step);
+//                Thread.sleep(step);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
         }
     };
     private void drawVehicles() {
-//        habitatPane.getChildren().clear();
-
-        ArrayList<Vehicle> vehicles = Habitat.getHabitat().getVehicles();
-        for (int i = 0; i < vehicles.size(); i++) { // add new
+        habitatPane.getChildren().clear();
+        ArrayList<Vehicle> vehicles = Habitat.getInstance().getVehicles();
+        for (int i = 0; i < vehicles.size(); i++) {
             Vehicle vehicle = vehicles.get(i);
-            Image image = new Image(getClass().getResource(vehicle.getImagePath()).toString(), 50, 50, false, false);
-            ImageView imageView = new ImageView(image);
+//            vehicle.performBehaviour();
+            ImageView imageView;
+            if (vehicle instanceof Car) {
+                imageView = new ImageView(Car.getImage());
+            } else {
+                imageView = new ImageView(Motorcycle.getImage());
+            }
             imageView.setX(vehicle.getX());
             imageView.setY(vehicle.getY());
             habitatPane.getChildren().add(imageView);

@@ -9,21 +9,13 @@ public class VehiclesCollections {
     private final HashSet<Integer> vehiclesId = new HashSet<>();
     private final TreeMap<Integer, Integer> vehiclesBirthTime = new TreeMap<>();
     private final ArrayList<Vehicle> vehicles = new ArrayList<>();
-    private VehiclesCollections() {
 
-    }
-    public static void initialize() {
-        vehiclesCollections = new VehiclesCollections();
-    }
-
-    public static synchronized VehiclesCollections getVehiclesCollections() {
+    public static synchronized VehiclesCollections getInstance() {
+        if (vehiclesCollections == null) {
+            vehiclesCollections = new VehiclesCollections();
+        }
         return vehiclesCollections;
     }
-
-    public static synchronized void setVehiclesCollections(VehiclesCollections vehiclesCollections) {
-        VehiclesCollections.vehiclesCollections = vehiclesCollections;
-    }
-
     public HashSet<Integer> getVehiclesId() {
         return vehiclesId;
     }
@@ -32,7 +24,7 @@ public class VehiclesCollections {
         return vehiclesBirthTime;
     }
 
-    public ArrayList<Vehicle> getVehicles() {
+    public synchronized ArrayList<Vehicle> getVehicles() {
         return vehicles;
     }
 }

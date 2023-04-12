@@ -1,6 +1,5 @@
 package com.example.fx2;
 
-import com.example.fx2.MainScreen.AIController;
 import com.example.fx2.MainScreen.MainScreenController;
 import com.example.fx2.MainScreen.models.*;
 import javafx.application.Application;
@@ -18,14 +17,14 @@ public class Main extends Application {
         scene.getStylesheets().add("style.css");
 
         MainScreenController mainScreenController = fxmlLoader.getController();
-        scene.setOnKeyPressed(mainScreenController);
-        VehiclesCollections.initialize();
-        Habitat.initialize(VehiclesCollections.getVehiclesCollections(), mainScreenController.getHabitatPane().getPrefWidth(),mainScreenController.getHabitatPane().getPrefHeight());
-        mainScreenController.setHabitatModel(Habitat.getHabitat());
+        scene.setOnKeyPressed(mainScreenController::handle);
+        Habitat habitat = Habitat.getInstance();
+        mainScreenController.setHabitatModel(habitat);
+        habitat.setWidthAndHeight(mainScreenController.getHabitatPane().getPrefWidth(), mainScreenController.getHabitatPane().getPrefHeight());
 //        BaseAI carAI = new CarAI();
 //        carAI.start();
 //        carAI.startAI();
-        AIController aiController = new AIController();
+//        AIController aiController = new AIController();
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();

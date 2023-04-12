@@ -8,37 +8,28 @@ public class Habitat {
     private boolean simulationRunning = false;
     private static double width, height;
     private static VehiclesCollections vehiclesCollections;
-//    private final HashSet<Integer> vehiclesId = new HashSet<>();
-//    private final TreeMap<Integer, Integer> vehiclesBirthTime = new TreeMap<>(); // id => birthTime
-    public VehicleSpawnParameters motoSpawnParameters = new VehicleSpawnParameters(80,1, 20);
-    public VehicleSpawnParameters carSpawnParameters = new VehicleSpawnParameters(100,3, 40);
-//    private final ArrayList<Vehicle> vehicles = new ArrayList<>();
-
+    public VehicleSpawnParameters motoSpawnParameters = new VehicleSpawnParameters(100,1, 200);
+    public VehicleSpawnParameters carSpawnParameters = new VehicleSpawnParameters(100,1, 400);
     public HashSet<Integer> getVehiclesId() {
-//        return vehiclesId;
         return vehiclesCollections.getVehiclesId();
     }
-
-//    TextAboutTypeAndNumbers simulationTime = new TextAboutTypeAndNumbers("Время симуляции: ");
     private final Map<String, TextAboutTypeAndNumbers> textAboutTypeAndNumbers = new HashMap<>() {{
         put("T", new TextAboutTypeAndNumbers("Время симуляции: "));
         put("carNumbers", new TextAboutTypeAndNumbers("Количество машин: "));
         put("motoNumbers", new TextAboutTypeAndNumbers("Количество мотоциклов: "));
     }};
-
-    public static void initialize(VehiclesCollections vehiclesCollections, double width, double height) {
-        habitat = new Habitat(vehiclesCollections, width, height);
-        Vehicle.setMaxXAndMaxY(width - 50, height);
-//        BaseAI.setMaxXAndY(width - 50, height);
-    }
-//    Timeline timeline;
-    private Habitat(VehiclesCollections vehiclesCollections,double width, double height) {
+    public static void setWidthAndHeight(double width, double height) {
         Habitat.width = width;
         Habitat.height = height;
-        Habitat.vehiclesCollections = vehiclesCollections;
+        Vehicle.setMaxXAndMaxY(width - 50, height);
     }
-
-    public static synchronized Habitat getHabitat() {
+    private Habitat() {
+        vehiclesCollections = VehiclesCollections.getInstance();
+    }
+    public static synchronized Habitat getInstance() {
+        if (habitat == null) {
+            habitat = new Habitat();
+        }
         return habitat;
     }
     public boolean getSimulationRunning() {
@@ -62,7 +53,6 @@ public class Habitat {
     }
 
     public TreeMap<Integer, Integer> getVehiclesBirthTime() {
-//        return vehiclesBirthTime;
         return vehiclesCollections.getVehiclesBirthTime();
     }
 
@@ -76,9 +66,6 @@ public class Habitat {
         vehiclesCollections.getVehiclesId().clear();
         vehiclesCollections.getVehiclesBirthTime().clear();
         vehiclesCollections.getVehicles().clear();
-//        vehiclesId.clear();
-//        vehiclesBirthTime.clear();
-//        vehicles.clear();
         for (Map.Entry<String, TextAboutTypeAndNumbers> current : textAboutTypeAndNumbers.entrySet()) {
             current.getValue().setNumbers(0);
         }
@@ -97,32 +84,23 @@ public class Habitat {
         vehiclesCollections.getVehiclesId().add(vehicle.getId());
         vehiclesCollections.getVehicles().add(vehicle);
         vehiclesCollections.getVehiclesBirthTime().put(vehicle.getId(), currentTime);
-
-//        while (vehiclesId.contains(vehicleId))
-//            vehicleId = Math.abs(random.nextInt()%maxId);
-//        vehicle.setId(vehicleId);
-//        vehiclesId.add(vehicle.getId());
-//        vehicles.add(vehicle);
-//        vehiclesBirthTime.put(vehicle.getId(), currentTime);
         if (vehicle instanceof Car) {
             textAboutTypeAndNumbers.get("carNumbers").increaseNumbers();
         } else if (vehicle instanceof Motorcycle) {
             textAboutTypeAndNumbers.get("motoNumbers").increaseNumbers();
         }
-
     }
     public void Update(int currentTime) {
-        removeVehiclesWithElapsedLifetime(currentTime);
+//        removeVehiclesWithElapsedLifetime(currentTime);
         Random random = new Random();
+        int randInt = Math.abs(random.nextInt()%100+1);
         if (currentTime %carSpawnParameters.generationTime == 0) {
-            int randInt = Math.abs(random.nextInt()%100+1);
             if ( carSpawnParameters.getGenerationProbability() >= randInt) {
                 Car car = new Car();
                 addVehicle(car, currentTime);
             }
         }
         if (currentTime %motoSpawnParameters.getGenerationTime() == 0) {
-            int randInt = Math.abs(random.nextInt()%100+1);
             if (motoSpawnParameters.getGenerationProbability() >= randInt) {
                 Motorcycle motorcycle = new Motorcycle();
                 addVehicle(motorcycle, currentTime);
@@ -130,12 +108,8 @@ public class Habitat {
         }
     }
     public void removeVehiclesWithElapsedLifetime(int currentTime) {
-//        for (int i = 0; i < vehicles.size(); i++) {
-//            var vehicle = vehicles.get(i);
-//            var lifetime = currentTime - vehiclesBirthTime.get(vehicle.getId());
         for (int i = 0; i < vehiclesCollections.getVehicles().size(); i++) {
             var vehicle = vehiclesCollections.getVehicles().get(i);
-//            var lifetime = currentTime - vehiclesBirthTime.get(vehicle.getId());
             var lifetime = currentTime - vehiclesCollections.getVehiclesBirthTime().get(vehicle.getId());
             boolean vehicleWithElapsedLifetime = false;
             if (vehicle instanceof Car) {
@@ -150,9 +124,6 @@ public class Habitat {
                 }
             }
             if (vehicleWithElapsedLifetime) {
-//                vehiclesBirthTime.remove(vehicle.getId());
-//                vehiclesId.remove(vehicle.getId());
-//                vehicles.remove(vehicle);
                 vehiclesCollections.getVehiclesBirthTime().remove(vehicle.getId());
                 vehiclesCollections.getVehiclesId().remove(vehicle.getId());
                 vehiclesCollections.getVehicles().remove(vehicle);

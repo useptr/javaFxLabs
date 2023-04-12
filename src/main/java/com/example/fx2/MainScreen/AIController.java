@@ -16,8 +16,8 @@ public class AIController {
     public AIController() {
         carAI.start();
         motorcycleAI.start();
-        carAI.startAI();
-        motorcycleAI.startAI();
+//        carAI.startAI();
+//        motorcycleAI.startAI();
     }
 //    public void performBehaviour() {
 //        carAI.updateCoordinates();
