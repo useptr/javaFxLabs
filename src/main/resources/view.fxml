@@ -170,6 +170,18 @@
                               <Insets left="10.0" right="10.0" top="10.0" />
                            </VBox.margin>
                         </Button>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <CheckBox fx:id="motorcycleAICheckBox" onAction="#motorcycleAICheckBoxSelected" mnemonicParsing="false" prefWidth="150.0" text="motorcycle AI" textFill="WHITE" />
+                              <CheckBox fx:id="carAICheckBox" onAction="#carAICheckBoxSelected" mnemonicParsing="false" prefWidth="150.0" text="car AI" textFill="WHITE" />
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <padding>
+                              <Insets left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
                      </children>
                   </VBox>
                   <StackPane>

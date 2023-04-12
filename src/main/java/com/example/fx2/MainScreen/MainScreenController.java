@@ -75,8 +75,13 @@ public class MainScreenController implements EventHandler {
         showTimeRadioBtn.setSelected(true);
         showTimeMenuItem.setDisable(true);
 
+        motorcycleAICheckBox.setSelected(true);
+        carAICheckBox.setSelected(true);
+
         currentVehicles.setDisable(true);
         timeline.setCycleCount(Timeline.INDEFINITE);
+
+
     }
 
 
@@ -432,7 +437,7 @@ private void showTimeRadioBtnSelected() {
         ArrayList<Vehicle> vehicles = Habitat.getInstance().getVehicles();
         for (int i = 0; i < vehicles.size(); i++) {
             Vehicle vehicle = vehicles.get(i);
-//            vehicle.performBehaviour();
+            vehicle.performBehaviour();
             ImageView imageView;
             if (vehicle instanceof Car) {
                 imageView = new ImageView(Car.getImage());
@@ -442,6 +447,25 @@ private void showTimeRadioBtnSelected() {
             imageView.setX(vehicle.getX());
             imageView.setY(vehicle.getY());
             habitatPane.getChildren().add(imageView);
+        }
+    }
+    @FXML
+    CheckBox motorcycleAICheckBox;
+    @FXML
+    CheckBox carAICheckBox;
+    public void motorcycleAICheckBoxSelected() {
+        if (motorcycleAICheckBox.isSelected()) {
+
+        } else {
+
+        }
+    }
+    @FXML
+    public void carAICheckBoxSelected() {
+        if (carAICheckBox.isSelected()) {
+
+        } else {
+
         }
     }
 }
