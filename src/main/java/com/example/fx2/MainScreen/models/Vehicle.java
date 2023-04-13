@@ -7,7 +7,6 @@ import java.util.Random;
 
 public abstract class Vehicle {
     IBehaviour vehicleBehaviour;
-//    BaseAI vehicleBehaviour;
     private static double maxX;
     private static double maxY;
     private double x;
@@ -16,7 +15,6 @@ public abstract class Vehicle {
     private int size = 50;
     private int timeOfBirth;
     private int lifetime;
-
     int xDirection;
     int yDirection;
     public double getStep() {
@@ -50,16 +48,9 @@ public abstract class Vehicle {
     public static double getMaxY() {
         return maxY;
     }
-
-
-//    public void setVehicleBehaviour(BaseAI vehicleBehaviour) {
-//        this.vehicleBehaviour = vehicleBehaviour;
-//    }
-
     public synchronized void performBehaviour() {
         vehicleBehaviour.updateCoordinates(this);
     }
-
     public void setSize(int size) {
         this.size = size;
     }
@@ -69,9 +60,6 @@ public abstract class Vehicle {
     public void setX(double x) {
         this.x = x;
     }
-//    public void setIBehaviour(IBehaviour iBehaviour) {
-//        this.iBehaviour =iBehaviour;
-//    }
     public int getSize() {
         return size;
     }
@@ -81,8 +69,6 @@ public abstract class Vehicle {
     public double getY() {
         return y;
     }
-
-
     public int getLifetime() {
         return lifetime;
     }

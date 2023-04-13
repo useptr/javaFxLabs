@@ -91,7 +91,7 @@ public class Habitat {
         }
     }
     public void Update(int currentTime) {
-//        removeVehiclesWithElapsedLifetime(currentTime);
+        removeVehiclesWithElapsedLifetime(currentTime);
         Random random = new Random();
         int randInt = Math.abs(random.nextInt()%100+1);
         if (currentTime %carSpawnParameters.generationTime == 0) {

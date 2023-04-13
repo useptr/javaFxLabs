@@ -1,23 +1,67 @@
 package com.example.fx2.MainScreen;
 
 import com.example.fx2.MainScreen.models.*;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.util.Duration;
-
-import java.util.ArrayList;
 
 public class AIController {
     private static final int SECOND = 1000;
     BaseAI carAI = new CarAI();
+
+    public BaseAI getCarAI() {
+        return carAI;
+    }
+
+    public void setCarAI(BaseAI carAI) {
+        this.carAI = carAI;
+    }
+
+    public BaseAI getMotorcycleAI() {
+        return motorcycleAI;
+    }
+
+    public void setMotorcycleAI(BaseAI motorcycleAI) {
+        this.motorcycleAI = motorcycleAI;
+    }
+
     BaseAI motorcycleAI = new MotorcycleAI();
 
     public AIController() {
         carAI.start();
         motorcycleAI.start();
-//        carAI.startAI();
-//        motorcycleAI.startAI();
+
+    }
+    public void carAISetRun(boolean state) {
+        carAI.setRun(state);
+    }
+    public void motorcycleAISetRun(boolean state) {
+        motorcycleAI.setRun(state);
+    }
+    public synchronized void notifyCarAI() {
+        carAI.notify();
+    }
+    public synchronized void notifyMotorcycleAI() {
+        motorcycleAI.notify();
+    }
+    public void notifyAI() {
+        carAI.notify();
+        motorcycleAI.notify();
+    }
+    public synchronized void waitCarAI() {
+        try {
+            carAI.wait();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public synchronized void waitMotorcycleAI() {
+        try {
+            motorcycleAI.wait();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void waitAI() {
+        waitCarAI();
+        waitMotorcycleAI();
     }
 //    public void performBehaviour() {
 //        carAI.updateCoordinates();

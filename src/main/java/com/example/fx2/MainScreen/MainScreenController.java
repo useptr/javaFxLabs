@@ -10,7 +10,6 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
@@ -23,7 +22,6 @@ import java.util.Optional;
 
 public class MainScreenController implements EventHandler {
     private static final double SECOND = 1000;
-//    AIController aiController = new AIController();
     @FXML
     Button startBtn;
     @FXML
@@ -65,8 +63,9 @@ public class MainScreenController implements EventHandler {
     private ArrayList<VehicleImage> vehiclesImages = new ArrayList<>();
     private static Habitat habitatModel;
     Timeline timeline = new Timeline(new KeyFrame(Duration.millis(SECOND), this::updateVehicles));
-    public void initialize() {
 
+    public void initialize() {
+//        aiController.waitAI();
         stopBtn.setDisable(true);
         stopMenuItem.setDisable(true);
 
@@ -219,40 +218,8 @@ private void showTimeRadioBtnSelected() {
         showInfoCheckBox.setSelected(false);
         showInfoMenuItem.setSelected(false);
     }
-    public Button getStartBtn() {
-        return startBtn;
-    }
-    public Button getStopBtn() {
-        return stopBtn;
-    }
-    public CheckBox getShowInfoCheckBox() {
-        return showInfoCheckBox;
-    }
-
-    public static synchronized Habitat getHabitatModel() {
-        return habitatModel;
-    }
-
     public Pane getHabitatPane() {
         return habitatPane;
-    }
-    public RadioButton getHideTimeRadioBtn() {
-        return hideTimeRadioBtn;
-    }
-    public RadioButton getShowTimeRadioBtn() {
-        return showTimeRadioBtn;
-    }
-    public Slider getCarChanceSlider() {
-        return carChanceSlider;
-    }
-    public Slider getMotocycleChanceSlider() {
-        return motocycleChanceSlider;
-    }
-    public TextField getCarSpawnTimeTextField() {
-        return carSpawnTimeTextField;
-    }
-    public TextField getMotocycleSpawnTimeTextField() {
-        return motocycleSpawnTimeTextField;
     }
     public void setHabitatModel(Habitat habitatModel) {
         this.habitatModel = habitatModel;
@@ -276,7 +243,9 @@ private void showTimeRadioBtnSelected() {
             spawnTimeText.setVisible(true);
         }
     }
+
     public void startSpawn() {
+//        aiController.notifyAI();
         startBtn.setDisable(true);
         startMenuItem.setDisable(true);
         stopBtn.setDisable(false);
@@ -426,7 +395,7 @@ private void showTimeRadioBtnSelected() {
         ArrayList<Vehicle> vehicles = Habitat.getInstance().getVehicles();
         for (int i = 0; i < vehicles.size(); i++) {
             Vehicle vehicle = vehicles.get(i);
-            vehicle.performBehaviour();
+//            vehicle.performBehaviour();
             ImageView imageView;
             if (vehicle instanceof Car) {
                 imageView = new ImageView(Car.getImage());
@@ -438,23 +407,33 @@ private void showTimeRadioBtnSelected() {
             habitatPane.getChildren().add(imageView);
         }
     }
+    AIController aiController = new AIController();
     @FXML
     CheckBox motorcycleAICheckBox;
     @FXML
     CheckBox carAICheckBox;
     public void motorcycleAICheckBoxSelected() {
         if (motorcycleAICheckBox.isSelected()) {
+            synchronized (aiController.getMotorcycleAI()) {
+                aiController.motorcycleAISetRun(true);
+                aiController.notifyMotorcycleAI();
+            }
 
         } else {
-
+//            aiController.waitMotorcycleAI();
+            aiController.motorcycleAISetRun(false);
         }
     }
     @FXML
     public void carAICheckBoxSelected() {
         if (carAICheckBox.isSelected()) {
-
+            synchronized (aiController.getCarAI()) {
+                aiController.carAISetRun(true);
+                aiController.notifyCarAI();
+            }
         } else {
-
+//            aiController.waitCarAI();
+            aiController.carAISetRun(false);
         }
     }
 }

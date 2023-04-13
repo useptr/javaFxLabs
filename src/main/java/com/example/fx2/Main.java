@@ -27,10 +27,7 @@ public class Main extends Application {
         Habitat habitat = Habitat.getInstance();
         mainScreenController.setHabitatModel(habitat);
         habitat.setWidthAndHeight(mainScreenController.getHabitatPane().getPrefWidth(), mainScreenController.getHabitatPane().getPrefHeight());
-//        BaseAI carAI = new CarAI();
-//        carAI.start();
-//        carAI.startAI();
-//        AIController aiController = new AIController();
+
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
