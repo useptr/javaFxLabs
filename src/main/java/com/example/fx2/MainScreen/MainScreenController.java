@@ -65,6 +65,8 @@ public class MainScreenController implements EventHandler {
     Timeline timeline = new Timeline(new KeyFrame(Duration.millis(SECOND), this::updateVehicles));
 
     public void initialize() {
+        manageAi(aiController.getMotorcycleAI(), false);
+        manageAi(aiController.getCarAI(), false);
 //        aiController.waitAI();
         stopBtn.setDisable(true);
         stopMenuItem.setDisable(true);
@@ -246,6 +248,9 @@ private void showTimeRadioBtnSelected() {
 
     public void startSpawn() {
 //        aiController.notifyAI();
+        manageAi(aiController.getMotorcycleAI(), true);
+        manageAi(aiController.getCarAI(), true);
+
         startBtn.setDisable(true);
         startMenuItem.setDisable(true);
         stopBtn.setDisable(false);
@@ -265,6 +270,9 @@ private void showTimeRadioBtnSelected() {
         if (showInfoCheckBox.isSelected()) {
             timeline.stop();
             animationTimer.stop();
+            manageAi(aiController.getMotorcycleAI(), false);
+            manageAi(aiController.getCarAI(), false);
+
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Stop simulation?");
             dialog.setHeaderText("Simulation info");
@@ -284,11 +292,17 @@ private void showTimeRadioBtnSelected() {
                 currentVehicles.setDisable(true);
                 timeline.stop();
                 animationTimer.stop();
+                manageAi(aiController.getMotorcycleAI(), false);
+                manageAi(aiController.getCarAI(), false);
             } else {
                 timeline.play();
                 animationTimer.start();
+                manageAi(aiController.getMotorcycleAI(), true);
+                manageAi(aiController.getCarAI(), true);
             }
         } else {
+            manageAi(aiController.getMotorcycleAI(), false);
+            manageAi(aiController.getCarAI(), false);
             startBtn.setDisable(false);
             startMenuItem.setDisable(false);
             stopBtn.setDisable(true);
@@ -309,6 +323,9 @@ private void showTimeRadioBtnSelected() {
         if (habitatModel.getSimulationRunning()) {
             timeline.stop();
             animationTimer.stop();
+            manageAi(aiController.getMotorcycleAI(), false);
+            manageAi(aiController.getCarAI(), false);
+
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Current vehicles");
             dialog.setHeaderText("Current vehicles");
@@ -334,9 +351,13 @@ private void showTimeRadioBtnSelected() {
             if (result.isPresent()) {
                 timeline.play();
                 animationTimer.start();
+                manageAi(aiController.getMotorcycleAI(), true);
+                manageAi(aiController.getCarAI(), true);
             } else {
                 timeline.play();
                 animationTimer.start();
+                manageAi(aiController.getMotorcycleAI(), true);
+                manageAi(aiController.getCarAI(), true);
             }
         }
     }
@@ -414,26 +435,47 @@ private void showTimeRadioBtnSelected() {
     CheckBox carAICheckBox;
     public void motorcycleAICheckBoxSelected() {
         if (motorcycleAICheckBox.isSelected()) {
-            synchronized (aiController.getMotorcycleAI()) {
-                aiController.motorcycleAISetRun(true);
-                aiController.notifyMotorcycleAI();
-            }
-
+            manageAi(aiController.getMotorcycleAI(), true);
         } else {
-//            aiController.waitMotorcycleAI();
-            aiController.motorcycleAISetRun(false);
+            manageAi(aiController.getMotorcycleAI(), false);
         }
+//        if (motorcycleAICheckBox.isSelected()) {
+//            synchronized (aiController.getMotorcycleAI()) {
+//                aiController.motorcycleAISetRun(true);
+//                aiController.notifyMotorcycleAI();
+//            }
+//
+//        } else {
+////            aiController.waitMotorcycleAI();
+//            aiController.motorcycleAISetRun(false);
+//        }
     }
     @FXML
     public void carAICheckBoxSelected() {
         if (carAICheckBox.isSelected()) {
-            synchronized (aiController.getCarAI()) {
-                aiController.carAISetRun(true);
-                aiController.notifyCarAI();
+            manageAi(aiController.getCarAI(), true);
+        } else {
+            manageAi(aiController.getCarAI(), false);
+        }
+
+//        if (carAICheckBox.isSelected()) {
+//            synchronized (aiController.getCarAI()) {
+//                aiController.carAISetRun(true);
+//                aiController.notifyCarAI();
+//            }
+//        } else {
+////            aiController.waitCarAI();
+//            aiController.carAISetRun(false);
+//        }
+    }
+    public void manageAi(BaseAI vehicleAI, boolean newState) {
+        if (newState) {
+            synchronized (vehicleAI) {
+                vehicleAI.setRun(true);
+                vehicleAI.notify();
             }
         } else {
-//            aiController.waitCarAI();
-            aiController.carAISetRun(false);
+            vehicleAI.setRun(false);
         }
     }
 }
