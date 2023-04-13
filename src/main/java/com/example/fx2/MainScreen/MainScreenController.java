@@ -80,8 +80,6 @@ public class MainScreenController implements EventHandler {
 
         currentVehicles.setDisable(true);
         timeline.setCycleCount(Timeline.INDEFINITE);
-
-
     }
 
 
@@ -130,14 +128,6 @@ public class MainScreenController implements EventHandler {
 //        System.out.println(habitatModel.getCarSpawnParameters().getGenerationProbability());
 //        carChanceSlider.getValue();
 
-    }
-    private String getVehicleType (Vehicle vehicle) {
-        if (vehicle instanceof Car) {
-            return "Car";
-        } else if (vehicle instanceof Motorcycle) {
-            return "Motorcycle";
-        }
-        return "";
     }
     private void checkLifetimeTextFieldValue(TextField textField, String errorMsg, VehicleSpawnParameters vehicleSpawnParameters) {
         String text = textField.getText();
@@ -306,7 +296,6 @@ private void showTimeRadioBtnSelected() {
         if (showInfoCheckBox.isSelected()) {
             timeline.stop();
             animationTimer.stop();
-
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Stop simulation?");
             dialog.setHeaderText("Simulation info");

@@ -9,12 +9,15 @@ public class Motorcycle extends Vehicle{
     public static Image getImage() {
         return image;
     }
+    public static void setImage(Image image) {
+        Motorcycle.image = image;
+    }
     private static String imagePath;
     public static String getImagePath() {
         return imagePath;
     }
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public static void setImagePath(String imagePath) {
+        Motorcycle.imagePath = imagePath;
     }
     public Motorcycle() {
         super.vehicleBehaviour = new MoveAlongYAxis();
@@ -24,9 +27,8 @@ public class Motorcycle extends Vehicle{
         super.step = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
         super.xDirection = 0;
         super.yDirection = 1;
-        imagePath = "/assets/moto.png";
-        image = new Image(getClass().getResource(imagePath).toString(), 50, 50, false, false);
-
+//        imagePath = "/assets/moto.png";
+//        image = new Image(getClass().getResource(imagePath).toString(), 50, 50, false, false);
     }
 
 }

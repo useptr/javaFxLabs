@@ -10,15 +10,15 @@ public class Car extends Vehicle{
         return image;
     }
 
-//    public static void setImage(Image image) {
-//        Vehicle.image = image;
-//    }
+    public static void setImage(Image image) {
+        Car.image = image;
+    }
 private static String imagePath;
     public static String getImagePath() {
     return imagePath;
 }
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public static void setImagePath(String imagePath) {
+        Car.imagePath = imagePath;
     }
     public Car () {
         super.vehicleBehaviour = new MoveAlongXAxis();
@@ -28,7 +28,7 @@ private static String imagePath;
         super.step = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
         super.xDirection = 1;
         super.yDirection = 0;
-        imagePath = "/assets/car.png";
-        image = new Image(getClass().getResource(imagePath).toString(), 50, 50, false, false);
+//        imagePath = "/assets/car.png";
+//        image = new Image(getClass().getResource(imagePath).toString(), 50, 50, false, false);
     }
 }
