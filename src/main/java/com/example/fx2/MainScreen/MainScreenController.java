@@ -5,6 +5,8 @@ import com.example.fx2.MainScreen.views.VehicleImage;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -63,8 +65,12 @@ public class MainScreenController implements EventHandler {
     private ArrayList<VehicleImage> vehiclesImages = new ArrayList<>();
     private static Habitat habitatModel;
     Timeline timeline = new Timeline(new KeyFrame(Duration.millis(SECOND), this::updateVehicles));
+    ObservableList <Integer> threadPriorityItems = FXCollections.observableArrayList(1,2,3,4,5,6,7,8,9,10);
 
     public void initialize() {
+         motorcycleAIThreadPriorityComboBox.setItems(threadPriorityItems);
+        carAIThreadPriorityComboBox.setItems(threadPriorityItems);
+
         manageAi(aiController.getMotorcycleAI(), false);
         manageAi(aiController.getCarAI(), false);
 //        aiController.waitAI();
@@ -477,5 +483,19 @@ private void showTimeRadioBtnSelected() {
         } else {
             vehicleAI.setRun(false);
         }
+    }
+    @FXML
+    ComboBox motorcycleAIThreadPriorityComboBox;
+    @FXML
+    ComboBox carAIThreadPriorityComboBox;
+
+    @FXML
+    public void motorcycleAIThreadPriorityComboBoxItemSelected() {
+        aiController.getMotorcycleAI().setPriority((int)motorcycleAIThreadPriorityComboBox.getValue());
+    }
+    @FXML
+    public void carAIThreadPriorityComboBoxItemSelected() {
+        aiController.getCarAI().setPriority((int)carAIThreadPriorityComboBox.getValue());
+//        System.out.println(aiController.getCarAI().getPriority());
     }
 }

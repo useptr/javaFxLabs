@@ -19,14 +19,14 @@ public class Main extends Application {
         Motorcycle.setImage(new Image(getClass().getResource(Motorcycle.getImagePath()).toString(), 50, 50, false, false));
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 760, 550);
+        Scene scene = new Scene(fxmlLoader.load());
         scene.getStylesheets().add("style.css");
 
         MainScreenController mainScreenController = fxmlLoader.getController();
         scene.setOnKeyPressed(mainScreenController::handle);
         Habitat habitat = Habitat.getInstance();
         mainScreenController.setHabitatModel(habitat);
-        habitat.setWidthAndHeight(mainScreenController.getHabitatPane().getPrefWidth(), mainScreenController.getHabitatPane().getPrefHeight());
+        habitat.setWidthAndHeight(mainScreenController.getHabitatPane().getWidth(), mainScreenController.getHabitatPane().getHeight());
 
         stage.setScene(scene);
         stage.setResizable(false);

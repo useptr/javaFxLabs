@@ -19,9 +19,11 @@ public class Habitat {
         put("motoNumbers", new TextAboutTypeAndNumbers("Количество мотоциклов: "));
     }};
     public static void setWidthAndHeight(double width, double height) {
+        height = 626 - 50;
+        width =460 - 50;
         Habitat.width = width;
         Habitat.height = height;
-        Vehicle.setMaxXAndMaxY(width - 50, height);
+        Vehicle.setMaxXAndMaxY(width, height);
     }
     private Habitat() {
         vehiclesCollections = VehiclesCollections.getInstance();
