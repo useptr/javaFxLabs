@@ -1,6 +1,8 @@
 package com.example.fx2.MainScreen;
 
-import com.example.fx2.MainScreen.models.*;
+import com.example.fx2.MainScreen.AI.BaseAI;
+import com.example.fx2.MainScreen.AI.CarAI;
+import com.example.fx2.MainScreen.AI.MotorcycleAI;
 
 public class AIController {
     private static final int SECOND = 1000;

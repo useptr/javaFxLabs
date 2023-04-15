@@ -1,4 +1,4 @@
-package com.example.fx2.MainScreen.models;
+package com.example.fx2.MainScreen.AI;
 
 public abstract class BaseAI extends Thread {
     private volatile boolean isRun = true;

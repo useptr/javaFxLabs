@@ -1,5 +1,6 @@
 package com.example.fx2.MainScreen.models;
 
+import com.example.fx2.MainScreen.Behaviour.MoveAlongXAxis;
 import javafx.scene.image.Image;
 
 import java.util.Random;

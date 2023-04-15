@@ -1,5 +1,6 @@
 package com.example.fx2.MainScreen;
 
+import com.example.fx2.MainScreen.AI.BaseAI;
 import com.example.fx2.MainScreen.models.*;
 import com.example.fx2.MainScreen.views.VehicleImage;
 import javafx.animation.AnimationTimer;

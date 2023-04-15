@@ -99,13 +99,18 @@ public class Habitat {
         if (currentTime %carSpawnParameters.generationTime == 0) {
             if ( carSpawnParameters.getGenerationProbability() >= randInt) {
                 Car car = new Car();
-                addVehicle(car, currentTime);
+                synchronized (getVehicles()) {
+                    addVehicle(car, currentTime);
+                }
+
             }
         }
         if (currentTime %motoSpawnParameters.getGenerationTime() == 0) {
             if (motoSpawnParameters.getGenerationProbability() >= randInt) {
                 Motorcycle motorcycle = new Motorcycle();
-                addVehicle(motorcycle, currentTime);
+                synchronized (getVehicles()) {
+                    addVehicle(motorcycle, currentTime);
+                }
             }
         }
     }

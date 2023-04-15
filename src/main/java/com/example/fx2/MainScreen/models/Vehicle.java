@@ -1,9 +1,6 @@
 package com.example.fx2.MainScreen.models;
 
-import javafx.geometry.Point2D;
-import javafx.scene.image.Image;
-
-import java.util.Random;
+import com.example.fx2.MainScreen.Behaviour.IBehaviour;
 
 public abstract class Vehicle {
     IBehaviour vehicleBehaviour;

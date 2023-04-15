@@ -3,6 +3,7 @@ package com.example.fx2;
 import com.example.fx2.MainScreen.MainScreenController;
 import com.example.fx2.MainScreen.models.*;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -21,6 +22,15 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         scene.getStylesheets().add("style.css");
+
+        stage.setOnCloseRequest(windowEvent -> {
+            try {
+                Platform.exit();
+                System.exit(0);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
         MainScreenController mainScreenController = fxmlLoader.getController();
         scene.setOnKeyPressed(mainScreenController::handle);

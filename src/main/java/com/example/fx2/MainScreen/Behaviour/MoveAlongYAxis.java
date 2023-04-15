@@ -1,4 +1,7 @@
-package com.example.fx2.MainScreen.models;
+package com.example.fx2.MainScreen.Behaviour;
+
+import com.example.fx2.MainScreen.Behaviour.IBehaviour;
+import com.example.fx2.MainScreen.models.Vehicle;
 
 public class MoveAlongYAxis implements IBehaviour {
     @Override
