@@ -499,4 +499,16 @@ private void showTimeRadioBtnSelected() {
         aiController.getCarAI().setPriority((int)carAIThreadPriorityComboBox.getValue());
 //        System.out.println(aiController.getCarAI().getPriority());
     }
+    @FXML
+    MenuItem downloadMenuItem;
+    @FXML
+    MenuItem saveMenuItem;
+    @FXML
+    public void downloadMenuItemSelected(){
+
+    }
+    @FXML
+    public void saveMenuItemSelected(){
+
+    }
 }

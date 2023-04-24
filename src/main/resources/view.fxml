@@ -67,6 +67,12 @@
              </Menu>
           </items>
         </Menu>
+            <Menu mnemonicParsing="false" text="Habitat">
+              <items>
+                <MenuItem  fx:id="downloadMenuItem" onAction="#downloadMenuItemSelected" mnemonicParsing="false" text="download" />
+                  <MenuItem fx:id="saveMenuItem" onAction="#saveMenuItemSelected"  mnemonicParsing="false" text="save" />
+              </items>
+            </Menu>
       </menus>
     </MenuBar>
     <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
@@ -92,7 +98,7 @@
                               <Insets left="5.0" top="10.0" />
                            </VBox.margin>
                         </Text>
-                        <ComboBox onAction="#motorcycleAIThreadPriorityComboBoxItemSelected" fx:id="motorcycleAIThreadPriorityComboBox" prefWidth="300.0" promptText="motorcycle AI thread priority">
+                        <ComboBox fx:id="motorcycleAIThreadPriorityComboBox" onAction="#motorcycleAIThreadPriorityComboBoxItemSelected" prefWidth="300.0" promptText="motorcycle AI thread priority">
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>
@@ -105,7 +111,7 @@
                               <Insets left="5.0" top="10.0" />
                            </VBox.margin>
                         </Text>
-                        <ComboBox onAction="#carAIThreadPriorityComboBoxItemSelected" fx:id="carAIThreadPriorityComboBox" prefWidth="300.0" promptText="car AI thread priority">
+                        <ComboBox fx:id="carAIThreadPriorityComboBox" onAction="#carAIThreadPriorityComboBoxItemSelected" prefWidth="300.0" promptText="car AI thread priority">
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>
