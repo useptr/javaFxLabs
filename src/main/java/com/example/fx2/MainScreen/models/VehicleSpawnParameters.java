@@ -3,7 +3,6 @@ package com.example.fx2.MainScreen.models;
 public class VehicleSpawnParameters {
     int generationProbability;
     int generationTime;
-
     int lifetime;
     public VehicleSpawnParameters(int generationProbability, int generationTime, int lifetime) {
         this.generationProbability = generationProbability;

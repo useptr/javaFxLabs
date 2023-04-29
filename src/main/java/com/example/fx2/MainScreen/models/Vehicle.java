@@ -2,7 +2,9 @@ package com.example.fx2.MainScreen.models;
 
 import com.example.fx2.MainScreen.Behaviour.IBehaviour;
 
-public abstract class Vehicle {
+import java.io.Serializable;
+
+public abstract class Vehicle implements Serializable {
     IBehaviour vehicleBehaviour;
     private static double maxX;
     private static double maxY;

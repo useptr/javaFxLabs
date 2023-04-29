@@ -1,0 +1,13 @@
+#Fri Apr 28 14:25:39 NOVT 2023
+carGenerationProbability=100
+cargenerationTime=2
+carlifetime=20
+currentVehicles=true
+isCarAIRun=true
+isMotoAIRun=true
+motoGenerationProbability=100
+motogenerationTime=1
+motolifetime=21
+showInfoIsSelected=false
+simulationRunning=false
+simulationTimeVisibility=true

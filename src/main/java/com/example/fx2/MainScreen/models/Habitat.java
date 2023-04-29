@@ -1,5 +1,7 @@
 package com.example.fx2.MainScreen.models;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.*;
 
 public class Habitat {
@@ -18,6 +20,70 @@ public class Habitat {
         put("carNumbers", new TextAboutTypeAndNumbers("Количество машин: "));
         put("motoNumbers", new TextAboutTypeAndNumbers("Количество мотоциклов: "));
     }};
+    public void saveVehiclesInFile(ObjectOutputStream out) {
+//        for (Vehicle vehicle : vehiclesCollections.getVehicles()) {
+            try{
+            out.writeObject(vehiclesCollections.getVehicles());
+//                System.out.println("vehicle saved");
+            }catch(Exception e){System.out.println(e);}
+//        }
+    }
+    public void reduceNumberOfMotorcyclesByNPrecent(int n) {
+        synchronized (vehiclesCollections.getVehicles()) {
+            int size = vehiclesCollections.getVehicles().size();
+            if (n == 100) {
+//                System.out.println(n);
+                for (int i = 0; i < size; i++) {
+                    var vehicle = vehiclesCollections.getVehicles().get(i);
+                    if (vehicle instanceof Motorcycle) {
+                        removeVehicle(vehicle);
+                        textAboutTypeAndNumbers.get("motoNumbers").decreaseNumbers();
+                        size = vehiclesCollections.getVehicles().size();
+                        i--;
+                    }
+                }
+            } else {
+                int motoCount = textAboutTypeAndNumbers.get("motoNumbers").getNumbers();
+                int count = motoCount * n / 100;
+//                System.out.println(motoCount + " " + count);
+                for (int i = 0; i < size; i++) {
+                    var vehicle = vehiclesCollections.getVehicles().get(i);
+                    if (count == 0)
+                        break;
+                    if (vehicle instanceof Motorcycle) {
+                        removeVehicle(vehicle);
+                        textAboutTypeAndNumbers.get("motoNumbers").decreaseNumbers();
+                        size = vehiclesCollections.getVehicles().size();
+                        i--;
+                        count--;
+                    }
+                }
+            }
+        }
+    }
+    public void removeVehicle(Vehicle vehicle) {
+        synchronized (vehiclesCollections.getVehiclesBirthTime()) {
+            vehiclesCollections.getVehiclesBirthTime().remove(vehicle.getId());
+        }
+        synchronized (vehiclesCollections.getVehiclesId()) {
+            vehiclesCollections.getVehiclesId().remove(vehicle.getId());
+        }
+//        synchronized (vehiclesCollections.getVehicles()) {
+            vehiclesCollections.getVehicles().remove(vehicle);
+//        }
+    }
+    public void readVehiclesFromFile(ObjectInputStream in) {
+        try{
+            ArrayList<Vehicle> vehicles;
+            vehicles = (ArrayList) in.readObject();
+            clearWithoutSimulationTime();
+            for (Vehicle vehicle : vehicles) {
+                vehicle.setTimeOfBirth(textAboutTypeAndNumbers.get("T").getNumbers());
+//                System.out.println(vehicle);
+                addVehicle(vehicle);
+            }
+        }catch(Exception e){System.out.println(e);}
+    }
     public static void setWidthAndHeight(double width, double height) {
         height = 626 - 50;
         width =460 - 50;
@@ -64,6 +130,15 @@ public class Habitat {
     public double getWidth() {
         return width;
     }
+    public void clearWithoutSimulationTime() {
+        vehiclesCollections.getVehiclesId().clear();
+        vehiclesCollections.getVehiclesBirthTime().clear();
+        vehiclesCollections.getVehicles().clear();
+        for (Map.Entry<String, TextAboutTypeAndNumbers> current : textAboutTypeAndNumbers.entrySet()) {
+            if (current.getKey() != "T")
+                current.getValue().setNumbers(0);
+        }
+    }
     public void clear() {
         vehiclesCollections.getVehiclesId().clear();
         vehiclesCollections.getVehiclesBirthTime().clear();
@@ -71,6 +146,25 @@ public class Habitat {
         for (Map.Entry<String, TextAboutTypeAndNumbers> current : textAboutTypeAndNumbers.entrySet()) {
             current.getValue().setNumbers(0);
         }
+    }
+    public void addVehicle(Vehicle vehicle) {
+        if (vehicle instanceof Car) {
+//            vehicle.setLifetime(carSpawnParameters.getLifetime());
+            textAboutTypeAndNumbers.get("carNumbers").increaseNumbers();
+        } else if (vehicle instanceof Motorcycle) {
+//            vehicle.setLifetime(motoSpawnParameters.getLifetime());
+            textAboutTypeAndNumbers.get("motoNumbers").increaseNumbers();
+        }
+        synchronized (vehiclesCollections.getVehiclesId()) {
+            vehiclesCollections.getVehiclesId().add(vehicle.getId());
+        }
+        synchronized (vehiclesCollections.getVehicles()) {
+            vehiclesCollections.getVehicles().add(vehicle);
+        }
+        synchronized (vehiclesCollections.getVehiclesBirthTime()) {
+            vehiclesCollections.getVehiclesBirthTime().put(vehicle.getId(), vehicle.getId());
+        }
+
     }
     public void addVehicle(Vehicle vehicle, int currentTime) {
         Random random = new Random();
@@ -114,6 +208,7 @@ public class Habitat {
             }
         }
     }
+
     public void removeVehiclesWithElapsedLifetime(int currentTime) {
         for (int i = 0; i < vehiclesCollections.getVehicles().size(); i++) {
             var vehicle = vehiclesCollections.getVehicles().get(i);

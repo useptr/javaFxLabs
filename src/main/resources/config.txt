@@ -1,0 +1,12 @@
+simulationRunning=false
+motoGenerationProbability=100
+motogenerationTime=1
+motolifetime=21
+carGenerationProbability=100
+cargenerationTime=2
+carlifetime=20
+simulationTimeVisibility=true
+isCarAIRun=true
+isMotoAIRun=true
+showInfoIsSelected=true
+currentVehicles=true

@@ -41,6 +41,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -69,8 +70,9 @@
         </Menu>
             <Menu mnemonicParsing="false" text="Habitat">
               <items>
-                <MenuItem  fx:id="downloadMenuItem" onAction="#downloadMenuItemSelected" mnemonicParsing="false" text="download" />
-                  <MenuItem fx:id="saveMenuItem" onAction="#saveMenuItemSelected"  mnemonicParsing="false" text="save" />
+                  <RadioMenuItem fx:id="terminalMenuItem" mnemonicParsing="false" onAction="#terminalMenuItemSelected" text="terminal" />
+                <MenuItem fx:id="downloadMenuItem" mnemonicParsing="false" onAction="#downloadMenuItemSelected" text="download" />
+                  <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" onAction="#saveMenuItemSelected" text="save" />
               </items>
             </Menu>
       </menus>
