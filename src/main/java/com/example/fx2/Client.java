@@ -1,9 +1,11 @@
 package com.example.fx2;
 
 import com.example.fx2.MainScreen.MainScreenController;
+import com.example.fx2.MainScreen.models.Vehicle;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.util.Pair;
 
 import java.io.*;
 import java.net.Socket;
@@ -15,13 +17,17 @@ public class Client {
     private BufferedReader in;
     private BufferedWriter out;
 
+    private int id;
+
     private ObjectInputStream objectInputStream;
+    private ObjectOutputStream objectOutputStream;
 
     public Client(String serverName, int port) {
         try {
             clientSocket = new Socket(serverName, port);
             out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
             objectInputStream = new ObjectInputStream(clientSocket.getInputStream());
         } catch (IOException e) {
             close();
@@ -32,6 +38,28 @@ public class Client {
         out.write(msg);
         out.newLine();
         out.flush();
+        } catch (IOException e) {
+            close();
+        }
+    }
+    public void exchangeVehicles(int exchangeWith) {
+        Pair<Integer,Integer> pair = new Pair<>(id, exchangeWith);
+        try {
+            objectOutputStream.reset();
+        objectOutputStream.writeObject(pair);
+//        objectOutputStream.flush();
+        } catch (IOException e) {
+            close();
+        }
+        System.out.println("send " + mainScreenController.getHabitatModel().getVehicles().size() + " vehicles to " + exchangeWith);
+        sendVehiclesTo(exchangeWith, mainScreenController.getHabitatModel().getVehicles());
+    }
+    public void sendVehiclesTo(int exchangeWith, ArrayList<Vehicle> vehicles) {
+        try {
+            Pair<Integer,ArrayList<Vehicle>> pair = new Pair<>(exchangeWith, vehicles);
+            objectOutputStream.reset();
+            objectOutputStream.writeObject(pair);
+//            objectOutputStream.flush();
         } catch (IOException e) {
             close();
         }
@@ -56,7 +84,7 @@ public class Client {
                                         @Override
                                         protected Object call() throws Exception {
                                             Platform.runLater(() -> {
-                                                mainScreenController.updateConnectionsViews(finalIds);
+                                                mainScreenController.updateConnectionsViews(finalIds, id);
                                             });
                                             return null;
                                         }
@@ -64,6 +92,29 @@ public class Client {
                                 }
                             };
                             New_Service.start();
+                        }
+                        if (object.getClass() == Integer.class) {
+                            id = (int) object;
+                            System.out.println("my id is " + id);
+                        }
+                        if (object.getClass() == Pair.class) {
+                            if(((Pair<?, ?>) object).getValue().getClass() == Integer.class) { // пришли 2 id
+
+                                Pair<Integer,Integer> pair = (Pair<Integer,Integer>)object;
+                                System.out.println("send vehicles from " + pair.getValue() + " to " + pair.getKey());
+                                sendVehiclesTo(pair.getKey(), mainScreenController.getHabitatModel().getVehicles());
+                            } else {
+
+                                Pair<Integer,ArrayList<Vehicle>> pair = (Pair<Integer,ArrayList<Vehicle>>)object;
+                                System.out.println("get " + pair.getValue().size() + " vehicles from another client");
+                                mainScreenController.getHabitatModel().setVehiclesFromClient(pair.getValue());
+//                                for (Vehicle vehicle : pair.getValue()) {
+//                                    System.out.println("Vehicle: "+ vehicle);
+//                                }
+
+                                // set new Vehicles
+                            }
+
                         }
 //                        mainScreenController.updateConnectionsViews(ids);
 //                        System.out.println("update ids");

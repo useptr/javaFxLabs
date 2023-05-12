@@ -25,7 +25,7 @@ private static String imagePath;
         super.vehicleBehaviour = new MoveAlongXAxis();
         Random rand = new Random();
         double rangeMin = 1;
-        double rangeMax = 8;
+        double rangeMax = 4;
         super.step = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
         super.xDirection = 1;
         super.yDirection = 0;

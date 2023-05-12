@@ -13,7 +13,6 @@ public abstract class Vehicle implements Serializable {
     private int id;
     private int size = 50;
     private int timeOfBirth;
-    private int lifetime;
     int xDirection;
     int yDirection;
     public double getStep() {
@@ -67,13 +66,6 @@ public abstract class Vehicle implements Serializable {
     }
     public double getY() {
         return y;
-    }
-    public int getLifetime() {
-        return lifetime;
-    }
-
-    public void setLifetime(int lifetime) {
-        this.lifetime = lifetime;
     }
 
     public int getTimeOfBirth() {

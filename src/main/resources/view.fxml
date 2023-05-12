@@ -95,7 +95,7 @@
                               <Insets left="5.0" right="5.0" top="10.0" />
                            </VBox.margin>
                         </ComboBox>
-                        <Button fx:id="BtnGetClientVehicles" minWidth="300.0" mnemonicParsing="false" style="-fx-background-color: #353535; -fx-text-fill: #fff;" text="get vehicles">
+                        <Button onAction="#BtnExchangeVehiclesClicked" fx:id="BtnGetClientVehicles" minWidth="300.0" mnemonicParsing="false" style="-fx-background-color: #353535; -fx-text-fill: #fff;" text="exchange vehicles">
                            <VBox.margin>
                               <Insets left="5.0" right="5.0" top="10.0" />
                            </VBox.margin>

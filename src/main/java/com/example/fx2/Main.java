@@ -34,6 +34,7 @@ public class Main extends Application {
         mainScreenController.setStage(stage);
 
         Client client = new Client("127.0.0.1", 8000);
+        mainScreenController.setClient(client);
         client.setMainScreenController(mainScreenController);
         client.listenForMsg();
 //        client.sendMessage("Hello");

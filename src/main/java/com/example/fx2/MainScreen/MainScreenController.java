@@ -1,5 +1,6 @@
 package com.example.fx2.MainScreen;
 
+import com.example.fx2.Client;
 import com.example.fx2.MainScreen.AI.BaseAI;
 import com.example.fx2.MainScreen.models.*;
 import com.example.fx2.MainScreen.views.VehicleImage;
@@ -31,6 +32,11 @@ import java.util.Optional;
 import java.util.Properties;
 
 public class MainScreenController implements EventHandler {
+    Client client;
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
     private static final double SECOND = 1000;
     @FXML
     Button startBtn;
@@ -136,13 +142,10 @@ public class MainScreenController implements EventHandler {
     @FXML
     private void motocycleChanceSliderValueChange() {
         habitatModel.getMotoSpawnParameters().setGenerationProbability((int)motocycleChanceSlider.getValue());
-//        System.out.println(habitatModel.getMotoSpawnParameters().getGenerationProbability());
     }
     @FXML
     private void carChanceSliderValueChange() {
         habitatModel.getCarSpawnParameters().setGenerationProbability((int)carChanceSlider.getValue());
-//        System.out.println(habitatModel.getCarSpawnParameters().getGenerationProbability());
-//        carChanceSlider.getValue();
 
     }
     private void checkLifetimeTextFieldValue(TextField textField, String errorMsg, VehicleSpawnParameters vehicleSpawnParameters) {
@@ -151,8 +154,9 @@ public class MainScreenController implements EventHandler {
             int lifetime;
             try {
                 lifetime = Integer.parseInt(text);
-                if (lifetime > 0)
+                if (lifetime > 0) {
                     vehicleSpawnParameters.setLifetime(lifetime);
+                }
                 else {
                     textField.setText(vehicleSpawnParameters.getLifetime()+"");
                     alert("Invalid input", errorMsg + text);
@@ -249,6 +253,9 @@ private void showTimeRadioBtnSelected() {
         carLifeTimeTextField.setText(this.habitatModel.getCarSpawnParameters().getLifetime()+"");
         if (habitatModel.getSimulationRunning())
             startSpawnWithoutReset();
+    }
+    public Habitat getHabitatModel() {
+        return habitatModel;
     }
     public void changeSpawnTimeVisibility() {
         if (spawnTimeText.isVisible()) {
@@ -459,9 +466,12 @@ private void showTimeRadioBtnSelected() {
     };
     private void drawVehicles() {
         habitatPane.getChildren().clear();
+
         ArrayList<Vehicle> vehicles = Habitat.getInstance().getVehicles();
+//        System.out.println("SIZE: " + vehicles.size());
         for (int i = 0; i < vehicles.size(); i++) {
             Vehicle vehicle = vehicles.get(i);
+//            System.out.println(" birth: " + vehicle.getTimeOfBirth());
 //            vehicle.performBehaviour();
             ImageView imageView;
             if (vehicle instanceof Car) {
@@ -742,13 +752,30 @@ private void showTimeRadioBtnSelected() {
     @FXML
     Button BtnGetClientVehicles;
 
-    public void updateConnectionsViews(ArrayList<Integer> ids) {
+    public void updateConnectionsViews(ArrayList<Integer> ids, int myId) {
         listViewOfAllConnectedClients.getItems().clear();
         ComboBoxOfAllConnectedClients.getItems().clear();
         for (int id : ids) {
+            if (id != myId) {
+                listViewOfAllConnectedClients.getItems().add("client number " + id);
+                ComboBoxOfAllConnectedClients.getItems().add(id + "");
+            }
 
-            listViewOfAllConnectedClients.getItems().add("client number " + id);
-            ComboBoxOfAllConnectedClients.getItems().add("client number " + id);
+        }
+
+    }
+    @FXML
+    public void BtnExchangeVehiclesClicked() {
+        String string = (String) ComboBoxOfAllConnectedClients.getValue();
+        if (string != null) {
+            try {
+                int exchangeWith = Integer.parseInt(string);
+                client.exchangeVehicles(exchangeWith);
+            }
+            catch (NumberFormatException e)
+                {
+                    e.printStackTrace();
+                }
         }
 
     }

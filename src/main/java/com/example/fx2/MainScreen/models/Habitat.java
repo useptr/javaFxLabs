@@ -9,6 +9,8 @@ public class Habitat {
 //    private IBehaviour iBehaviour = new MoveNoWay();
     private boolean simulationRunning = false;
     private static double width, height;
+
+    private static int currentTime;
     private static VehiclesCollections vehiclesCollections;
     public VehicleSpawnParameters motoSpawnParameters = new VehicleSpawnParameters(100,1, 200);
     public VehicleSpawnParameters carSpawnParameters = new VehicleSpawnParameters(100,1, 400);
@@ -71,6 +73,15 @@ public class Habitat {
 //        synchronized (vehiclesCollections.getVehicles()) {
             vehiclesCollections.getVehicles().remove(vehicle);
 //        }
+    }
+    public void setVehiclesFromClient(ArrayList<Vehicle> vehicles) {
+        try{
+            clearWithoutSimulationTime();
+            for (Vehicle vehicle : vehicles) {
+                vehicle.setTimeOfBirth(textAboutTypeAndNumbers.get("T").getNumbers());
+                addVehicle(vehicle);
+            }
+        }catch(Exception e){System.out.println(e);}
     }
     public void readVehiclesFromFile(ObjectInputStream in) {
         try{
@@ -148,11 +159,10 @@ public class Habitat {
         }
     }
     public void addVehicle(Vehicle vehicle) {
+        vehicle.setTimeOfBirth(textAboutTypeAndNumbers.get("T").getNumbers());
         if (vehicle instanceof Car) {
-//            vehicle.setLifetime(carSpawnParameters.getLifetime());
             textAboutTypeAndNumbers.get("carNumbers").increaseNumbers();
         } else if (vehicle instanceof Motorcycle) {
-//            vehicle.setLifetime(motoSpawnParameters.getLifetime());
             textAboutTypeAndNumbers.get("motoNumbers").increaseNumbers();
         }
         synchronized (vehiclesCollections.getVehiclesId()) {
@@ -177,14 +187,16 @@ public class Habitat {
         while (vehiclesCollections.getVehiclesId().contains(vehicleId))
             vehicleId = Math.abs(random.nextInt()%maxId);
         vehicle.setId(vehicleId);
-        vehiclesCollections.getVehiclesId().add(vehicle.getId());
-        vehiclesCollections.getVehicles().add(vehicle);
-        vehiclesCollections.getVehiclesBirthTime().put(vehicle.getId(), currentTime);
+        vehicle.setTimeOfBirth(currentTime);
         if (vehicle instanceof Car) {
             textAboutTypeAndNumbers.get("carNumbers").increaseNumbers();
         } else if (vehicle instanceof Motorcycle) {
             textAboutTypeAndNumbers.get("motoNumbers").increaseNumbers();
         }
+        vehiclesCollections.getVehiclesId().add(vehicle.getId());
+        vehiclesCollections.getVehicles().add(vehicle);
+        vehiclesCollections.getVehiclesBirthTime().put(vehicle.getId(), currentTime);
+
     }
     public void Update(int currentTime) {
         removeVehiclesWithElapsedLifetime(currentTime);
@@ -212,7 +224,7 @@ public class Habitat {
     public void removeVehiclesWithElapsedLifetime(int currentTime) {
         for (int i = 0; i < vehiclesCollections.getVehicles().size(); i++) {
             var vehicle = vehiclesCollections.getVehicles().get(i);
-            var lifetime = currentTime - vehiclesCollections.getVehiclesBirthTime().get(vehicle.getId());
+            var lifetime = currentTime - vehicle.getTimeOfBirth();
             boolean vehicleWithElapsedLifetime = false;
             if (vehicle instanceof Car) {
                 if (lifetime > carSpawnParameters.getLifetime()) {

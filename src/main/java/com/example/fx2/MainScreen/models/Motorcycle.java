@@ -24,7 +24,7 @@ public class Motorcycle extends Vehicle{
         super.vehicleBehaviour = new MoveAlongYAxis();
         Random rand = new Random();
         double rangeMin = 1;
-        double rangeMax = 8;
+        double rangeMax = 4;
         super.step = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
         super.xDirection = 0;
         super.yDirection = 1;
