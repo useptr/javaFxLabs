@@ -7,4 +7,6 @@ module com.example.fx2 {
     exports com.example.fx2;
     exports com.example.fx2.MainScreen;
     opens com.example.fx2.MainScreen to javafx.fxml;
+    exports com.example.fx2.server;
+    opens com.example.fx2.server to javafx.fxml;
 }

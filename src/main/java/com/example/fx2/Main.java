@@ -32,11 +32,18 @@ public class Main extends Application {
 
         MainScreenController mainScreenController = fxmlLoader.getController();
         mainScreenController.setStage(stage);
+
+        Client client = new Client("127.0.0.1", 8000);
+        client.listenForMsg();
+//        client.sendMessage("Hello");
         stage.setOnCloseRequest(windowEvent -> {
             try {
+                client.close();
                 mainScreenController.uploadSimulationSettings();
                 Platform.exit();
+
                 System.exit(0);
+//
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
@@ -49,6 +56,7 @@ public class Main extends Application {
 
         stage.setScene(scene);
         stage.setResizable(false);
+
         stage.show();
     }
 
