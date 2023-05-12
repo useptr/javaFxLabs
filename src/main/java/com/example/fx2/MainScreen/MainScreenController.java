@@ -737,4 +737,19 @@ private void showTimeRadioBtnSelected() {
     }
     @FXML
     ListView listViewOfAllConnectedClients;
+    @FXML
+    ComboBox ComboBoxOfAllConnectedClients;
+    @FXML
+    Button BtnGetClientVehicles;
+
+    public void updateConnectionsViews(ArrayList<Integer> ids) {
+        listViewOfAllConnectedClients.getItems().clear();
+        ComboBoxOfAllConnectedClients.getItems().clear();
+        for (int id : ids) {
+
+            listViewOfAllConnectedClients.getItems().add("client number " + id);
+            ComboBoxOfAllConnectedClients.getItems().add("client number " + id);
+        }
+
+    }
 }

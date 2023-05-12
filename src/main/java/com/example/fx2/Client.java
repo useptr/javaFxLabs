@@ -1,10 +1,16 @@
 package com.example.fx2;
 
+import com.example.fx2.MainScreen.MainScreenController;
+import javafx.application.Platform;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
 public class Client {
+    private MainScreenController mainScreenController;
     private Socket clientSocket;
     private BufferedReader in;
     private BufferedWriter out;
@@ -39,11 +45,31 @@ public class Client {
                 while (clientSocket.isConnected()) {
                     try {
                         Object object = objectInputStream.readObject();
-                        ids = (ArrayList<Integer>)object;
-                        System.out.println("update ids");
-                        for (int id : ids) {
-                            System.out.println(id);
+
+                        if (object.getClass() == ArrayList.class) {
+                            ids = (ArrayList<Integer>) object;
+                            ArrayList<Integer> finalIds = ids;
+                            Service New_Service = new Service() {
+                                @Override
+                                protected Task createTask() {
+                                    return new Task() {
+                                        @Override
+                                        protected Object call() throws Exception {
+                                            Platform.runLater(() -> {
+                                                mainScreenController.updateConnectionsViews(finalIds);
+                                            });
+                                            return null;
+                                        }
+                                    };
+                                }
+                            };
+                            New_Service.start();
                         }
+//                        mainScreenController.updateConnectionsViews(ids);
+//                        System.out.println("update ids");
+//                        for (int id : ids) {
+//                            System.out.println(id);
+//                        }
 //                        msgFromServer = in.readLine();
 //                        System.out.println(msgFromServer);
                     } catch (IOException e) {
@@ -81,5 +107,9 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setMainScreenController(MainScreenController mainScreenController) {
+        this.mainScreenController = mainScreenController;
     }
 }

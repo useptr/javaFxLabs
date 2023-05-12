@@ -34,6 +34,7 @@ public class Main extends Application {
         mainScreenController.setStage(stage);
 
         Client client = new Client("127.0.0.1", 8000);
+        client.setMainScreenController(mainScreenController);
         client.listenForMsg();
 //        client.sendMessage("Hello");
         stage.setOnCloseRequest(windowEvent -> {

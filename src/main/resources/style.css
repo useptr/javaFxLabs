@@ -24,7 +24,7 @@
 -fx-background-color: #353535;
 }
 .list-cell:odd {
--fx-background-color: -fx-darkest-grey-color;
+-fx-background-color: #d6d6d6;
 }
 .button {
 -fx-border-color: rgba(0, 0, 0, 0);
@@ -38,7 +38,15 @@
 -fx-border-color:#fff;
 -fx-border-radius:3px;
 }
-
+.hbox {
+    -fx-background-color: #353535;
+}
+.vbox {
+    -fx-background-color: #353535;
+}
+.pane{
+-fx-background-color: #353535;
+}
 .text-field {
 -fx-text-fill: #fff;
 }

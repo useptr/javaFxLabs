@@ -82,7 +82,26 @@
          <children>
             <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                <children>
-                  <ListView fx:id="listViewOfAllConnectedClients" prefHeight="200.0" prefWidth="300.0" />
+                  <VBox blendMode="DARKEN" prefWidth="300.0" style="-fx-background-color: #121212;">
+                     <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="current connections" textAlignment="CENTER">
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </VBox.margin>
+                        </Text>
+                        <ListView fx:id="listViewOfAllConnectedClients" prefWidth="300.0" />
+                        <ComboBox fx:id="ComboBoxOfAllConnectedClients" prefWidth="300.0" promptText="client number">
+                           <VBox.margin>
+                              <Insets left="5.0" right="5.0" top="10.0" />
+                           </VBox.margin>
+                        </ComboBox>
+                        <Button fx:id="BtnGetClientVehicles" minWidth="300.0" mnemonicParsing="false" style="-fx-background-color: #353535; -fx-text-fill: #fff;" text="get vehicles">
+                           <VBox.margin>
+                              <Insets left="5.0" right="5.0" top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
                   <VBox blendMode="DARKEN" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="300.0" style="-fx-background-color: #121212;">
                      <children>
                         <HBox prefWidth="200.0">
