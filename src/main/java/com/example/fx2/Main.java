@@ -15,11 +15,15 @@ import javafx.util.Pair;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
+import java.sql.*;
 import java.util.Properties;
 
 public class Main extends Application {
+
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) throws IOException, SQLException {
+
+
         Car.setImagePath("/assets/car.png");
 //        System.out.println(getClass().getResource(Car.getImagePath()).toString());
         Car.setImage(new Image(getClass().getResource(Car.getImagePath()).toString(), 50, 50, false, false));
@@ -35,14 +39,16 @@ public class Main extends Application {
         MainScreenController mainScreenController = fxmlLoader.getController();
         mainScreenController.setStage(stage);
 
+
+
 //        Client client = mainScreenController.getIpAndPort();
-        Client client = new Client(new Socket("127.0.0.1", 8000));
+/*        Client client = new Client(new Socket("127.0.0.1", 8000));
         mainScreenController.setClient(client);
         client.setMainScreenController(mainScreenController);
-        client.listenForMsg();
+        client.listenForMsg();*/
         stage.setOnCloseRequest(windowEvent -> {
             try {
-                client.close();
+//                client.close();
                 mainScreenController.uploadSimulationSettings();
                 Platform.exit();
 

@@ -76,6 +76,11 @@
                   <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" onAction="#saveMenuItemSelected" text="save" />
               </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="Database">
+              <items>
+                <MenuItem mnemonicParsing="false" text="dowmloan/upload" onAction="#databaseMenuItemSelected" />
+              </items>
+            </Menu>
       </menus>
     </MenuBar>
     <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
@@ -95,7 +100,7 @@
                               <Insets left="5.0" right="5.0" top="10.0" />
                            </VBox.margin>
                         </ComboBox>
-                        <Button onAction="#BtnExchangeVehiclesClicked" fx:id="BtnGetClientVehicles" minWidth="300.0" mnemonicParsing="false" style="-fx-background-color: #353535; -fx-text-fill: #fff;" text="exchange vehicles">
+                        <Button fx:id="BtnGetClientVehicles" minWidth="300.0" mnemonicParsing="false" onAction="#BtnExchangeVehiclesClicked" style="-fx-background-color: #353535; -fx-text-fill: #fff;" text="exchange vehicles">
                            <VBox.margin>
                               <Insets left="5.0" right="5.0" top="10.0" />
                            </VBox.margin>

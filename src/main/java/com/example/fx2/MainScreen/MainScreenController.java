@@ -31,6 +31,7 @@ import javafx.util.Pair;
 
 import java.io.*;
 import java.net.Socket;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Properties;
@@ -703,7 +704,24 @@ private void showTimeRadioBtnSelected() {
     TextField terminalTextField = new TextField("reduce moto ");
     VBox terminalVBox = new VBox();
     Stage primaryStage = new Stage();
+
+    ListView<String> bdLisetView = new ListView<>();
+    ComboBox<String> dbComboBox = new ComboBox<>();
+    Button bdUploadBtn = new Button("upload");
+    Button bdDonwloadBtn = new Button("donwload");
+    VBox dbVBox = new VBox();
+    Stage dbStage = new Stage();
+
+    final String user = "postgres";
+    final String pass = "admin";
+    final String url = "jdbc:postgresql://127.0.0.1:8080/fx_labs";
+    Connection connection = null;
     public void initTerminal() {
+        try {
+            connection = DriverManager.getConnection(url, user, pass);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         double terminalWidth =350;
         double terminalHeight =400;
         Pane terminalPane = new Pane();
@@ -719,6 +737,131 @@ private void showTimeRadioBtnSelected() {
         primaryStage.initOwner(stage);
         primaryStage.initModality(Modality.NONE);
         primaryStage.setResizable(false);
+
+        Pane dbPane = new Pane();
+        dbComboBox.getItems().addAll(
+                "All",
+                "Cars",
+                "Motorcycles"
+        );
+        dbComboBox.setPrefWidth(terminalWidth);
+        bdLisetView.setPrefWidth(terminalWidth);
+        bdLisetView.setMaxHeight(terminalHeight-20);
+//        bdLisetView.setPrefHeight(terminalHeight);
+        bdUploadBtn.setPrefWidth(terminalWidth);
+        bdUploadBtn.setOnAction(this::bdUploadBtnClicked);
+        bdDonwloadBtn.setPrefWidth(terminalWidth);
+        bdDonwloadBtn.setOnAction(this::bdDownloadBtnClicked);
+        dbVBox.getChildren().add(dbComboBox);
+        dbVBox.getChildren().add(bdLisetView);
+        dbVBox.getChildren().add(bdUploadBtn);
+        dbVBox.getChildren().add(bdDonwloadBtn);
+        dbPane.getChildren().add(dbVBox);
+        Scene dbScene = new Scene(dbPane, terminalWidth, terminalHeight + 100);
+        dbStage.setTitle("Database");
+        dbStage.setScene(dbScene);
+        dbStage.initOwner(stage);
+        dbStage.initModality(Modality.NONE);
+//        dbStage.setResizable(false);
+    }
+
+    private void bdDownloadBtnClicked(ActionEvent actionEvent) {
+        ArrayList<Vehicle> vehicles = null;
+        String type = dbComboBox.getValue();
+        if (type == null)
+            type = "All";
+        String list = bdLisetView.getSelectionModel().getSelectedItem();
+        if (list != null && !list.isEmpty()) {
+            String id = list.split(" ")[1];;
+//            System.out.println(id);
+            String sql = "SELECT * FROM vehicle_lists WHERE id = "+ id;
+            try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet rs = preparedStatement.executeQuery();
+            // iterate through the java resultset
+            if (rs.next())
+            {
+                byte[] data = rs.getBytes("list");
+                ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(data));
+                vehicles = (ArrayList<Vehicle>) in.readObject();
+                habitatModel.readVehiclesFromDB(vehicles, type);
+                in.close();
+            }
+                preparedStatement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+    }
+
+    private void getVehicleListsFromDB() {
+        bdLisetView.getItems().clear();
+        try {
+            String sql = "SELECT * FROM vehicle_lists";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                int carCount = resultSet.getInt("carcount");
+                int motoCount = resultSet.getInt("motocount");
+                bdLisetView.getItems().add("id: "+id+" \tcarCount: "+carCount+" \tmotoCount: "+motoCount);
+            }
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    private void bdUploadBtnClicked(ActionEvent actionEvent) {
+        ArrayList<Vehicle> list = new ArrayList<>();
+        int carCount = 0;
+        int motoCount = 0;
+        String type = dbComboBox.getValue();
+        if (type == null)
+            type = "All";
+        for (Vehicle vehicle :  habitatModel.getVehicles()) {
+            if (vehicle instanceof Car) {
+                if (type.equals("All") || type.equals("Cars")) {
+                    carCount++;
+                    list.add(vehicle);
+                }
+            } else if (vehicle instanceof Motorcycle) {
+                if (type.equals("All") || type.equals("Motorcycles")) {
+                    motoCount++;
+                    list.add(vehicle);
+                }
+            }
+        }
+        ByteArrayOutputStream output =
+                new ByteArrayOutputStream();
+        ObjectOutputStream obj;
+        try {
+            obj = new ObjectOutputStream(output);
+            obj.writeObject(list);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        byte[] bytes = output.toByteArray();
+        try {
+            String sql = "INSERT INTO vehicle_lists (carcount, motocount, list) VALUES ("+carCount+", "+motoCount+", ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setBytes(1, bytes);
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        getVehicleListsFromDB();
+    }
+    @FXML
+    public void databaseMenuItemSelected() {
+        getVehicleListsFromDB();
+        dbStage.show();
     }
     public void openTextAreaInNewWindow() {
         if (habitatModel.getSimulationRunning())

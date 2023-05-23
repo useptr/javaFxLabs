@@ -83,6 +83,24 @@ public class Habitat {
             }
         }catch(Exception e){System.out.println(e);}
     }
+    public void readVehiclesFromDB(ArrayList<Vehicle> vehicles, String type) {
+        try{
+            clearWithoutSimulationTime();
+            for (Vehicle vehicle : vehicles) {
+                vehicle.setTimeOfBirth(textAboutTypeAndNumbers.get("T").getNumbers());
+                if (vehicle instanceof Car) {
+                    if (type.equals("All") || type.equals("Cars")) {
+                        addVehicle(vehicle);
+                    }
+                } else if (vehicle instanceof Motorcycle) {
+                    if (type.equals("All") || type.equals("Motorcycles")) {
+                        addVehicle(vehicle);
+                    }
+                }
+
+            }
+        }catch(Exception e){System.out.println(e);}
+    }
     public void readVehiclesFromFile(ObjectInputStream in) {
         try{
             ArrayList<Vehicle> vehicles;
