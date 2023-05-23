@@ -22,7 +22,18 @@ public class Client {
     private ObjectInputStream objectInputStream;
     private ObjectOutputStream objectOutputStream;
 
-    public Client(String serverName, int port) {
+    public Client(Socket socket) {
+        try {
+            clientSocket = socket;
+            out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
+            objectInputStream = new ObjectInputStream(clientSocket.getInputStream());
+        } catch (IOException e) {
+            close();
+        }
+    }
+/*    public Client(String serverName, int port) {
         try {
             clientSocket = new Socket(serverName, port);
             out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
@@ -32,7 +43,7 @@ public class Client {
         } catch (IOException e) {
             close();
         }
-    }
+    }*/
     public void sendMsg(String msg) {
         try {
         out.write(msg);

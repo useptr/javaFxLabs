@@ -4,6 +4,7 @@ import com.example.fx2.Client;
 import com.example.fx2.MainScreen.AI.BaseAI;
 import com.example.fx2.MainScreen.models.*;
 import com.example.fx2.MainScreen.views.VehicleImage;
+import com.example.fx2.PortFinder;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -19,14 +20,17 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.util.Pair;
 
 import java.io.*;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Properties;
@@ -302,6 +306,38 @@ private void showTimeRadioBtnSelected() {
         spawnTimeText.setText(habitatModel.getTextAboutTypeAndNumbers().get("T").getFinishedInformation());
         timeline.play();
         animationTimer.start();
+    }
+    public Client getIpAndPort() {
+        String localhost = "127.0.0.1";
+        String ip = "";
+        while(!ip.equals(localhost)) {
+            TextInputDialog dialog = new TextInputDialog("127.0.0.1");
+            dialog.setTitle("set ip");
+            dialog.setHeaderText("Enter ip:");
+            dialog.setContentText("ip:");
+            Optional<String> result = dialog.showAndWait();
+            ip = result.get();
+//            System.out.println(localhost + " == " + ip);
+        }
+        int port = 0;
+        Socket socket = null;
+        do {
+            TextInputDialog dialog = new TextInputDialog("8000");
+            dialog.setTitle("set port");
+            dialog.setHeaderText("Enter port:");
+            dialog.setContentText("port:");
+            Optional<String> result = dialog.showAndWait();
+            port = Integer.parseInt(result.get());
+            try {
+                socket = new Socket(ip, port);
+            } catch ( IOException e) {
+                e.printStackTrace();
+            }
+/*            System.out.println(ip + " " + port);
+            System.out.println((socket.isClosed()));*/
+        }
+        while((socket.isClosed()));
+        return new Client(socket);
     }
     public void stopSpawn() {
         if (showInfoCheckBox.isSelected()) {

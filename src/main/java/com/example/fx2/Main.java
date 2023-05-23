@@ -10,9 +10,11 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.Pair;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.Socket;
 import java.util.Properties;
 
 public class Main extends Application {
@@ -33,11 +35,11 @@ public class Main extends Application {
         MainScreenController mainScreenController = fxmlLoader.getController();
         mainScreenController.setStage(stage);
 
-        Client client = new Client("127.0.0.1", 8000);
+//        Client client = mainScreenController.getIpAndPort();
+        Client client = new Client(new Socket("127.0.0.1", 8000));
         mainScreenController.setClient(client);
         client.setMainScreenController(mainScreenController);
         client.listenForMsg();
-//        client.sendMessage("Hello");
         stage.setOnCloseRequest(windowEvent -> {
             try {
                 client.close();

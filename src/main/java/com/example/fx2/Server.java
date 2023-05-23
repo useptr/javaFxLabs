@@ -5,6 +5,7 @@ import com.example.fx2.server.ClientsHandler;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class Server {
 
@@ -35,9 +36,22 @@ public class Server {
 e.printStackTrace();
         }
     }
+
+
         public static void main(String[] args) throws IOException {
 
-            Server server = new Server(8000);
+
+            int port = 8000;
+/*            PortFinder portFinder = new PortFinder();
+            Scanner scanner = new Scanner( System.in );
+            System.out.println("enter port: ");
+            port = scanner.nextInt();
+            while (!portFinder.findFreePort(port)) {
+                System.out.println("port "+ port +"  is busy. Enter another port: ");
+                port = scanner.nextInt();
+            }
+            System.out.println("ServerSocket work with port "+ port);*/
+            Server server = new Server(port);
             server.start();
         }
 }
